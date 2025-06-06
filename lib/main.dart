@@ -7,14 +7,15 @@ import 'Screen/postScreen.dart';
 import 'Screen/registerScreen.dart';
 import 'component/bottomNavbar.dart';
 import 'component/route.dart';
-import 'controllers/register_controller.dart';
+
+import 'models/echo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
 
-  Get.put(BST());
+  Get.put(Echo());
   runApp(const MyApp());
 }
 

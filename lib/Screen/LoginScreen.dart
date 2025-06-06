@@ -2,6 +2,9 @@ import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/register_controller.dart';
+import '../models/echo.dart';
+
+import '../models/bst.dart';
 
 class LoginScreen extends StatelessWidget {
    LoginScreen({super.key});
@@ -10,12 +13,12 @@ class LoginScreen extends StatelessWidget {
 
   final passwordController = TextEditingController();
 
-  final controller = Get.put(BST());
+  final controller = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BST>(
-      builder: (_) {
+
+
         return Scaffold(
           appBar: AppBar(title: const Text('Login to Echo')),
           body: Padding(
@@ -54,7 +57,7 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
+
+
   }
 }

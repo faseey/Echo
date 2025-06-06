@@ -1,87 +1,43 @@
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-
 import '../component/route.dart';
 import '../user_data_model/userService.dart';
+import '../models/echo.dart';  // Adjust path
 
-class BSTNode {
-  User user;
-  BSTNode? left;
-  BSTNode? right;
-
-  BSTNode(this.user);
-}
-
-class BST extends GetxController{
-  String error =' ';
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadFromFirebase(); // Load existing users on start (optional)
-  }
+class UserController extends GetxController {
+  String error = '';
+  final userCollection = FirebaseFirestore.instance.collection('users');
 
 
+  // Get Echo instance from GetX
+  final Echo echo = Get.find<Echo>();
 
+  Future<void> registerUser(User user) async {
+    error = '';
+    update();
 
-  BSTNode? root;
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-
-  Future<void> insert(User user) async {
-    root = _insert(root, user);
-
-    // Save user to Firestore
-    await userCollection.doc(user.username).set(user.toJson());
-  }
-
-  BSTNode _insert(BSTNode? node, User user) {
-    if (node == null) {
-      return BSTNode(user);
+    // Check if username already exists
+    if (echo.bst.search(user.username) != null) {
+      error = "Username already exists";
+      update();
+      return;
     }
 
-    if (user.username.compareTo(node.user.username) < 0) {
-      node.left = _insert(node.left, user);
-    } else if (user.username.compareTo(node.user.username) > 0) {
-      node.right = _insert(node.right, user);
-    }
+    try {
+      // Insert user into BST via Echo
+      await echo.bst.insert(user);
 
-    return node;
-  }
+      // Optionally set activeUser here if you want
+      echo.activeUser = echo.bst.search(user.username) ;
 
-  BSTNode? search(String username) {
-    return _search(root, username);
-  }
+      // Navigate or other logic
+      Get.offNamed(AppRouter.profileScreen, arguments: user);
 
-  BSTNode? _search(BSTNode? node, String username) {
-    if (node == null || node.user.username == username) return node;
-
-    if (username.compareTo(node.user.username) < 0) {
-      return _search(node.left, username);
-    } else {
-      return _search(node.right, username);
+    } catch (e) {
+      error = 'Registration failed: ${e.toString()}';
+      update();
     }
   }
-
-  BSTNode? getRoot() {
-    return root;
-  }
-
-  Future<void> loadFromFirebase() async {
-    QuerySnapshot snapshot = await userCollection.get();
-
-    for (var doc in snapshot.docs) {
-      User user = User.fromJson(doc.data() as Map<String, dynamic>);
-      root = _insert(root, user);
-    }
-  }
-
-
-
   Future<void> logIn(String userName, String password) async {
     // Clear previous errors
     error = '';
@@ -96,7 +52,7 @@ class BST extends GetxController{
 
     try {
       // Search in BST
-      final node = search(userName.trim());
+      final node = echo.bst.search(userName.trim());
 
       // Validate credentials
       if (node == null || node.user.password != password) {
@@ -119,7 +75,7 @@ class BST extends GetxController{
       if (node.user.username.isEmpty) {
         throw Exception("User data corrupted");
       }
-
+      print("Login Successful");
       // Navigate with guaranteed non-null user
       Get.offNamed(
         AppRouter.profileScreen,
@@ -131,7 +87,4 @@ class BST extends GetxController{
       update();
     }
   }
-
-
-
 }

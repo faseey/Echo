@@ -9,6 +9,8 @@ import 'package:echo_app/Screen/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/bst.dart';
+import '../models/echo.dart';
 import '../user_data_model/userService.dart';
 
 // Assuming BST is here
@@ -18,7 +20,8 @@ class RegisterScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  final controller = Get.put(BST());
+  final userController = Get.put(UserController());
+
 
   // Controllers for all User fields
   final usernameController = TextEditingController();
@@ -38,8 +41,8 @@ class RegisterScreen extends StatelessWidget {
   // BST instance
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BST>(
-      builder: (_) {
+
+
         return Scaffold(
           appBar: AppBar(
             title: Center(
@@ -168,6 +171,16 @@ class RegisterScreen extends StatelessWidget {
                                 : null,
                   ),
                   const SizedBox(height: 20),
+                  GetBuilder<UserController>(
+                    builder: (controller) => controller.error.isNotEmpty
+                        ? Text(
+                      controller.error,
+                      style: const TextStyle(color: Colors.red),
+                    )
+                        : const SizedBox.shrink(),
+                  ),
+
+
 
                   ElevatedButton(
                     onPressed: () async {
@@ -187,7 +200,8 @@ class RegisterScreen extends StatelessWidget {
                         );
 
                         // Insert into BST and Firestore
-                        await controller.insert(newUser);
+                        await userController.registerUser(newUser);
+
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -250,7 +264,7 @@ class RegisterScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
+
+
   }
 }
