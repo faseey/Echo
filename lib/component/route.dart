@@ -1,0 +1,21 @@
+import 'package:get/get.dart';
+
+import '../Screen/LoginScreen.dart';
+import '../Screen/postScreen.dart';
+import '../Screen/profileScreen.dart';
+import '../Screen/registerScreen.dart';
+
+class AppRouter{
+  static const registerScreen = "/registerScreen";
+  static const loginScreen = "/loginScreen";
+  static const postScreen = "/postScreen";
+  static const profileScreen = "/profileScreen";
+
+  static final route = [
+    GetPage(name: registerScreen, page: ()=>RegisterScreen()),
+    GetPage(name: loginScreen, page: ()=>LoginScreen()),
+    GetPage(name: postScreen, page: ()=>PostScreen()),
+    GetPage(name: profileScreen, page: ()=>ProfileScreen()),
+
+  ];
+}

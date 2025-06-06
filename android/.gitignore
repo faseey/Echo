@@ -1,0 +1,45 @@
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+.cxx/
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/to/reference-keystore
+key.properties
+**/*.keystore
+**/*.jks
+
+# Flutter build output
+build/
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE configs
+.idea/
+.vscode/
+
+# macOS files
+.DS_Store
+
+# iOS build folders
+ios/Pods/
+ios/.symlinks/
+ios/Runner.xcworkspace/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+xcuserdata/
+
+# Log files
+*.log
+
+# Dependency lock files (optional, but recommended to ignore)
+pubspec.lock
+
+# Environment variables (if any)
+.env
