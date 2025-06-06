@@ -1,6 +1,7 @@
 import 'dart:io';
 
 
+import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -91,6 +92,9 @@ class ProfileScreen extends StatelessWidget {
                 Text(user.username,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                 SizedBox(height: 10,),
                 Text(controller.bio.isNotEmpty? controller.bio : 'No bio added',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                ElevatedButton(onPressed: (){
+                  Get.toNamed(AppRouter.loginScreen);
+                }, child: Text("pop"))
 
               ],
             ),
