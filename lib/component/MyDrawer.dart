@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../Screen/LoginScreen.dart';
 import '../Screen/postScreen.dart';
@@ -8,62 +10,28 @@ import '../controllers/register_controller.dart';
 
 import 'myListTile.dart';
 
-class MyDrawer extends StatefulWidget {
- // final RegisterUser userManager;
-  const MyDrawer({super.key, });
-
-  @override
-  State<MyDrawer> createState() => _MydrawerState();
-}
-
-class _MydrawerState extends State<MyDrawer> {
- // RegisterUser userManager = RegisterUser();
-
-  void GotoProfileScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ProfileScreen()),
-    );
-  }
-
+class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<UserController>();
     return Drawer(
-      backgroundColor: Colors.grey.shade900,
       child: Column(
         children: [
-          DrawerHeader(
-            child: Icon(Icons.person, color: Colors.white, size: 62),
+          const DrawerHeader(child: Icon(Icons.person, size: 62)),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('H O M E'),
+            onTap: () => Get.offNamed('/home'),
           ),
-
-          Expanded(
-            flex: 0,
-            child: MyListTile(text: 'H O M E', icon: Icons.home, onTab: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen(),));
-            }),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('P R O F I L E'),
+            onTap: () => Get.toNamed('/profile'),
           ),
-          Expanded(
-            child: MyListTile(
-              text: 'P R O F I L E',
-              icon: Icons.person,
-              onTab: GotoProfileScreen,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: MyListTile(
-              text: 'L O G O U T',
-              icon: Icons.login,
-              onTab: () {
-               // userManager.logoutUser();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
-                  ),
-                );
-              },
-            ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('L O G O U T'),
+            onTap: () => controller.logOut(),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/route.dart';
 import '../user_data_model/userService.dart';
@@ -6,6 +7,7 @@ import '../models/echo.dart';  // Adjust path
 
 class UserController extends GetxController {
   String error = '';
+  var isLoggedIn = false;
   final userCollection = FirebaseFirestore.instance.collection('users');
 
 
@@ -76,15 +78,28 @@ class UserController extends GetxController {
         throw Exception("User data corrupted");
       }
       print("Login Successful");
+      isLoggedIn = true;
+      update();
       // Navigate with guaranteed non-null user
       Get.offNamed(
-        AppRouter.profileScreen,
+        AppRouter.bottomnavbar,
         arguments: node.user,
       );
 
     } catch (e) {
       error = 'Login failed: ${e.toString()}';
       update();
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      echo.activeUser = null;
+      isLoggedIn = false;
+      update();
+      Get.toNamed(AppRouter.loginScreen);
+    } catch (e) {
+      Get.snackbar('Error', 'Logout failed: ${e.toString()}');
     }
   }
 }

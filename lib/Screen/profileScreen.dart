@@ -28,9 +28,12 @@ class ProfileScreen extends StatelessWidget {
       );
     }
 
-    controller.initializeUser(user);
+
+
+
 
     return GetBuilder<profileController>(
+
       builder: (_) {
         return Scaffold(
           appBar: AppBar(
@@ -92,9 +95,7 @@ class ProfileScreen extends StatelessWidget {
                 Text(user.username,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                 SizedBox(height: 10,),
                 Text(controller.bio.isNotEmpty? controller.bio : 'No bio added',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                ElevatedButton(onPressed: (){
-                  Get.toNamed(AppRouter.loginScreen);
-                }, child: Text("pop"))
+
 
               ],
             ),

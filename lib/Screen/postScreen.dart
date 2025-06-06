@@ -35,7 +35,7 @@ class _PostscreenState extends State<PostScreen> {
     final messages = controller.userMessage.toList();
 
     final User user = Get.arguments;
-    return GetBuilder(builder: (_){
+    return GetBuilder<PostController>(builder: (_){
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey,

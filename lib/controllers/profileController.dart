@@ -15,6 +15,7 @@ class profileController extends GetxController {
   String imageUrl = '';
   String bio = '';
 
+
   User? currentUser;
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -26,6 +27,8 @@ class profileController extends GetxController {
     imageUrl = user.profileImageUrl ?? '';
     update();
   }
+
+
 
   Future<void> getImage() async {
     if (currentUser == null) {  // Add null check
