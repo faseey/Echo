@@ -8,6 +8,7 @@ import 'Screen/registerScreen.dart';
 import 'component/bottomNavbar.dart';
 import 'component/route.dart';
 
+import 'controllers/register_controller.dart';
 import 'models/echo.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
   await Firebase.initializeApp();
 
   Get.put(Echo());
+  Get.put(UserController());
   runApp(const MyApp());
 }
 

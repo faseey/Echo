@@ -13,7 +13,8 @@ class LoginScreen extends StatelessWidget {
 
   final passwordController = TextEditingController();
 
-  final controller = Get.put(UserController());
+   final controller = Get.find<UserController>();  // To access the existing controller
+
 
   @override
   Widget build(BuildContext context) {

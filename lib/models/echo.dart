@@ -19,6 +19,7 @@ class Echo extends GetxController {
     bst = BST();
     connections = null;
     activeUser = null;
+    bst.loadFromFirebase();
   }
 
   //  Find index of user in BST (in-order)
