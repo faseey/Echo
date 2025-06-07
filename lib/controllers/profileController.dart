@@ -2,36 +2,43 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echo_app/controllers/register_controller.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+
+
+import '../models/bst.dart';
+import '../models/echo.dart';
+
+import '../models/poststack.dart';
 import '../user_data_model/userService.dart';
+
 
 class profileController extends GetxController {
   String imagePath = '';
   String imageUrl = '';
   String bio = '';
 
-
-  User? currentUser;
+  // Reference to the active logged-in UserNode from Echo
+  BSTNode? get activeUserNode => Echo.activeUser;
+  User? get currentUser => activeUserNode?.user;
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void initializeUser(User user) {
-    currentUser = user;
-    bio = user.bio ?? '';
-    imageUrl = user.profileImageUrl ?? '';
-    update();
+  void initializeUser() {
+    if (currentUser != null) {
+      bio = currentUser!.bio ?? '';
+      imageUrl = currentUser!.profileImageUrl ?? '';
+      update();
+    } else {
+      log("No active user node found");
+    }
   }
 
-
-
   Future<void> getImage() async {
-    if (currentUser == null) {  // Add null check
+    if (currentUser == null) {
       Get.snackbar("Error", "No user initialized");
       return;
     }
@@ -44,23 +51,6 @@ class profileController extends GetxController {
       update();
     }
   }
-
-  /*Future<void> uploadImageToFirebase() async {
-    if (imagePath.isNotEmpty) {
-      File file = File(imagePath);
-      try {
-        final fileName =
-            "user_image/${DateTime.now().microsecondsSinceEpoch}.jpg";
-        TaskSnapshot snapshot = await _storage.ref(fileName).putFile(file);
-        imageUrl = await snapshot.ref.getDownloadURL();
-        update();
-      } catch (e) {
-        Get.snackbar("Error", "Error Uploading Image");
-      }
-    } else {
-      Get.snackbar('Error', "No Image selected");
-    }
-  }*/
 
   Future<void> uploadImageToFirebase() async {
     if (imagePath.isEmpty) {
@@ -83,7 +73,6 @@ class profileController extends GetxController {
     }
   }
 
-  // In profileController.dart
   Future<void> saveData(String newBio) async {
     if (currentUser == null) {
       log("No user set in controller");
@@ -108,17 +97,75 @@ class profileController extends GetxController {
       };
 
       // Update Firestore
-      await _firestore
-          .collection('users')
-          .doc(currentUser!.username)
-          .update(updateData);
+      await _firestore.collection('users').doc(currentUser!.username).update(updateData);
 
-      log("Updated: $updateData");
+      log("Updated profile: $updateData");
       update(); // Refresh UI
 
     } catch (e) {
       log("Error saving data: $e");
       Get.snackbar("Error", "Failed to save profile data");
+    }
+  }
+
+  // PostStack related methods
+
+  void addNewPost(String content, String date) {
+    if (activeUserNode == null) {
+      Get.snackbar("Error", "No active user");
+      return;
+    }
+
+    final newPost = Post(
+      username: currentUser!.username,
+      content: content,
+      date: date,
+    );
+
+    activeUserNode!.user.postStack.push(newPost);
+    update();
+  }
+
+  List<Post> getPostsList() {
+    if (activeUserNode == null) return [];
+    return activeUserNode!.user.postStack.toList();
+  }
+
+  void clearPosts() {
+    if (activeUserNode == null) return;
+    activeUserNode!.user.postStack.clear();
+    update();
+  }
+
+  // Optionally: Save posts list to Firestore under user document (if you want)
+  Future<void> savePostsToFirestore() async {
+    if (currentUser == null || activeUserNode == null) return;
+
+    try {
+      final postsJsonList = activeUserNode!.user.postStack.toJsonList();
+      await _firestore.collection('users').doc(currentUser!.username).update({
+        'posts': postsJsonList,
+      });
+      log("Posts saved to Firestore");
+    } catch (e) {
+      log("Error saving posts: $e");
+    }
+  }
+
+  // Load posts from Firestore on init or when needed
+  Future<void> loadPostsFromFirestore() async {
+    if (currentUser == null || activeUserNode == null) return;
+
+    try {
+      final doc = await _firestore.collection('users').doc(currentUser!.username).get();
+      if (doc.exists) {
+        final postsJsonList = doc.data()?['posts'] as List<dynamic>? ?? [];
+        activeUserNode!.user.postStack.clear();
+        activeUserNode!.user.postStack.loadFromJsonList(postsJsonList);
+        update();
+      }
+    } catch (e) {
+      log("Error loading posts: $e");
     }
   }
 }

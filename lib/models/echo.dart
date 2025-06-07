@@ -6,10 +6,10 @@ import 'bst.dart';
 
 
 class Echo extends GetxController {
-  int userCount = 0;
+  static int userCount = 0;
   BST bst = BST();
   List<List<int>>? connections;
-  BSTNode? activeUser;
+  static BSTNode? activeUser;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String connectionsDocId = "connections_matrix"; // document ID for adjacency matrix

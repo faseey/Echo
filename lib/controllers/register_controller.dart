@@ -30,8 +30,8 @@ class UserController extends GetxController {
       await echo.bst.insert(user);
 
       // Optionally set activeUser here if you want
-      echo.activeUser = echo.bst.search(user.username) ;
-      echo.userCount++;
+      Echo.activeUser = echo.bst.search(user.username) ;
+      Echo.userCount++;
       final newConnections = await echo.getUpdatedConnections();
 
       // Assign only if non-empty (optional check)
@@ -39,7 +39,7 @@ class UserController extends GetxController {
         echo.connections = newConnections;
         await echo.saveConnectionsToFirebase();
       }
-      print(echo.userCount);
+
       print('Saving connections matrix: $echo.connections');
 
       // Navigate or other logic
@@ -106,7 +106,7 @@ class UserController extends GetxController {
 
   Future<void> logOut() async {
     try {
-      echo.activeUser = null;
+      Echo.activeUser = null;
       isLoggedIn = false;
       update();
       Get.toNamed(AppRouter.loginScreen);

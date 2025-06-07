@@ -1,25 +1,22 @@
 import 'dart:io';
 
-
 import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
-
 
 import '../controllers/profileController.dart';
 import '../controllers/register_controller.dart';
 import '../user_data_model/userService.dart';
 
 class ProfileScreen extends StatelessWidget {
-
-  ProfileScreen({super.key, });
-
+  ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(profileController());
+    controller.initializeUser(); // <- Initialize bio and image URL
+
     final user = Get.arguments;
 
     if (user == null || user is! User) {
@@ -28,12 +25,7 @@ class ProfileScreen extends StatelessWidget {
       );
     }
 
-
-
-
-
     return GetBuilder<profileController>(
-
       builder: (_) {
         return Scaffold(
           appBar: AppBar(
@@ -45,69 +37,109 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.grey.shade300,
-                        backgroundImage:
-                            controller.imagePath.isNotEmpty
-                                ? FileImage(File(controller.imagePath)) :
-                              (controller.imageUrl.isNotEmpty
-                                ? NetworkImage(controller.imageUrl) as ImageProvider
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey.shade300,
+                            backgroundImage: controller.imagePath.isNotEmpty
+                                ? FileImage(File(controller.imagePath))
+                                : (controller.imageUrl.isNotEmpty
+                                ? NetworkImage(controller.imageUrl)
+                            as ImageProvider
                                 : null),
-                        child:
-                        (controller.imagePath.isEmpty && controller.imageUrl.isEmpty)
-                            ? const Icon(Icons.person, size: 50)
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 2,
-                        right: 2,
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
+                            child: (controller.imagePath.isEmpty &&
+                                controller.imageUrl.isEmpty)
+                                ? const Icon(Icons.person, size: 50)
+                                : null,
                           ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-
-                                _showBottomSheet(context, controller);
-                              },
-                              icon: Icon(Icons.add,size: 15,color: Colors.white,),
+                          Positioned(
+                            bottom: 2,
+                            right: 2,
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  onPressed: () {
+                                    _showBottomSheet(context, controller);
+                                  },
+                                  icon: Icon(
+                                    Icons.add,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      user.username,
+                      style:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      controller.bio.isNotEmpty
+                          ? controller.bio
+                          : 'No bio added',
+                      style:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 10,),
-                Text(user.username,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                SizedBox(height: 10,),
-                Text(controller.bio.isNotEmpty? controller.bio : 'No bio added',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-
-
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              const Divider(thickness: 1),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("Posts",
+                    style:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              Expanded(
+                child: controller.getPostsList().isEmpty
+                    ? const Center(child: Text("No posts yet"))
+                    : ListView.builder(
+                  itemCount: controller.getPostsList().length,
+                  itemBuilder: (context, index) {
+                    final post = controller.getPostsList()[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ListTile(
+                        title: Text(post.content),
+                        subtitle: Text("Posted on: ${post.date}"),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },
     );
   }
-  void _showBottomSheet(BuildContext context, profileController controller ) {
-    final controller = Get.find<profileController>();
-    final bioController = TextEditingController(text: controller.bio);
 
+  void _showBottomSheet(
+      BuildContext context, profileController controller) {
+    final bioController = TextEditingController(text: controller.bio);
 
     showModalBottomSheet(
       context: context,
@@ -146,7 +178,6 @@ class ProfileScreen extends StatelessWidget {
                 child: const Text("Save"),
               ),
               const SizedBox(height: 20),
-
               Text(
                 controller.bio.isNotEmpty
                     ? controller.bio
@@ -159,6 +190,4 @@ class ProfileScreen extends StatelessWidget {
       },
     );
   }
-
-
-    }
+}
