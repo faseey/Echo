@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import '../Screen/homescreen.dart';
 import '../Screen/postScreen.dart';
 import '../Screen/profileScreen.dart';
 
@@ -10,7 +11,7 @@ class Bottomnavbar extends StatelessWidget {
 
   // Define screens list directly (alternative to _buildScreens method)
   final List<Widget> _screens = [
-    Center(child: Text("Add Content")),
+    HomeScreen(),
     Center(child: Text("Friends")),
     PostScreen(),
     Center(child: Text("Inbox")),
