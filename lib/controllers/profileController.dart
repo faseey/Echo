@@ -15,7 +15,7 @@ import '../models/poststack.dart';
 import '../user_data_model/userService.dart';
 
 
-class profileController extends GetxController {
+class ProfileController extends GetxController {
   String imagePath = '';
   String imageUrl = '';
   String bio = '';

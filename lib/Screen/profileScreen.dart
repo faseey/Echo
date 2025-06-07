@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(profileController());
+    final controller = Get.put(ProfileController());
     controller.initializeUser(); // <- Initialize bio and image URL
 
     final user = Get.arguments;
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
       );
     }
 
-    return GetBuilder<profileController>(
+    return GetBuilder<ProfileController>(
       builder: (_) {
         return Scaffold(
           appBar: AppBar(
@@ -138,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _showBottomSheet(
-      BuildContext context, profileController controller) {
+      BuildContext context, ProfileController controller) {
     final bioController = TextEditingController(text: controller.bio);
 
     showModalBottomSheet(

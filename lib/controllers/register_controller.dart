@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echo_app/controllers/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/route.dart';
@@ -92,6 +93,8 @@ class UserController extends GetxController {
       print("Login Successful");
       isLoggedIn = true;
       Echo.activeUser = node;
+      // jab user login ho ya app reload ho
+
       update();
       // Navigate with guaranteed non-null user
       Get.offNamed(
