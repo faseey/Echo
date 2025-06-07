@@ -10,9 +10,9 @@ class Bottomnavbar extends StatelessWidget {
 
   // Define screens list directly (alternative to _buildScreens method)
   final List<Widget> _screens = [
-    PostScreen(),
-    Center(child: Text("Friends")),
     Center(child: Text("Add Content")),
+    Center(child: Text("Friends")),
+    PostScreen(),
     Center(child: Text("Inbox")),
     ProfileScreen(),
   ];

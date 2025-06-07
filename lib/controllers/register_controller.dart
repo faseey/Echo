@@ -91,6 +91,7 @@ class UserController extends GetxController {
       }
       print("Login Successful");
       isLoggedIn = true;
+      Echo.activeUser = node;
       update();
       // Navigate with guaranteed non-null user
       Get.offNamed(
