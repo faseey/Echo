@@ -12,7 +12,7 @@ class Echo extends GetxController {
   BSTNode? activeUser;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String connectionsDocId = "connections_matrix";  // document ID for adjacency matrix
+  final String connectionsDocId = "connections_matrix"; // document ID for adjacency matrix
 
   Echo() {
     userCount = 0;
@@ -29,11 +29,13 @@ class Echo extends GetxController {
     return resultIndex[0];
   }
 
-  int _findIndexInBST(BSTNode? node, String username, int currentIndex, List<int> resultIndex) {
+  int _findIndexInBST(BSTNode? node, String username, int currentIndex,
+      List<int> resultIndex) {
     if (node == null) return currentIndex;
 
     // Traverse left
-    currentIndex = _findIndexInBST(node.left, username, currentIndex, resultIndex);
+    currentIndex =
+        _findIndexInBST(node.left, username, currentIndex, resultIndex);
 
     // Check current node
     if (node.user.username == username) {
@@ -44,22 +46,20 @@ class Echo extends GetxController {
     // Traverse right
     return _findIndexInBST(node.right, username, currentIndex, resultIndex);
   }
+
   // Update local adjacency matrix size and sync to Firebase
-  Future<void> updateConnections() async {
+  Future<List<List<int>>> getUpdatedConnections() async {
     if (userCount <= 0) {
-      connections = [];
-      await _saveConnectionsToFirebase();
-      return;
+      return [];
     }
 
     List<List<int>> tempConnections = List.generate(
       userCount,
-          (_) => List.generate(userCount, (_) => 0),
+          (index) => List.generate(userCount, (index) => 0),
     );
 
     if (connections != null) {
-      int oldSize =  connections?.length ?? 0;
-
+      int oldSize = connections!.length;
       for (int i = 0; i < oldSize; i++) {
         for (int j = 0; j < oldSize; j++) {
           tempConnections[i][j] = connections![i][j];
@@ -67,23 +67,35 @@ class Echo extends GetxController {
       }
     }
 
-    connections = tempConnections;
-
-    // Save updated connections to Firebase
-    await _saveConnectionsToFirebase();
+    return tempConnections;
   }
 
-  // Save adjacency matrix to Firestore
-  Future<void> _saveConnectionsToFirebase() async {
+
+  Future<void> saveConnectionsToFirebase() async {
     if (connections == null) return;
 
-    // Firestore does not support nested List<List<int>> directly
-    // So convert List<List<int>> to List<List<dynamic>> (int is dynamic so it's fine)
-    await _firestore.collection('app_data').doc(connectionsDocId).set({
-      'connections': connections,
-      'userCount': userCount,
-    });
+    try {
+      // Convert List<List<int>> to List<Map<String, dynamic>> for Firestore
+      List<Map<String, dynamic>> converted = connections!.map((row) {
+        return {
+          'row': row,
+        };
+      }).toList();
+
+      await _firestore.collection('app_data').doc(connectionsDocId).set({
+        'connections': converted,
+        'userCount': userCount,
+      });
+
+      print('Connections saved to Firestore successfully.');
+
+    } catch (e) {
+      print('Error saving connections to Firestore: $e');
+    }
   }
+
+
+
 
   // Load adjacency matrix from Firestore
   Future<void> loadConnectionsFromFirebase() async {
@@ -98,10 +110,9 @@ class Echo extends GetxController {
 
         List<dynamic> rawConnections = data['connections'] ?? [];
 
-        // Convert List<dynamic> to List<List<int>>
-        connections = rawConnections
-            .map<List<int>>((row) => List<int>.from(row))
-            .toList();
+        connections = rawConnections.map<List<int>>((rowMap) {
+          return List<int>.from(rowMap['row']);
+        }).toList();
       }
     }
   }

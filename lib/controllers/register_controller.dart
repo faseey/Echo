@@ -31,9 +31,21 @@ class UserController extends GetxController {
 
       // Optionally set activeUser here if you want
       echo.activeUser = echo.bst.search(user.username) ;
+      echo.userCount++;
+      final newConnections = await echo.getUpdatedConnections();
+
+      // Assign only if non-empty (optional check)
+      if (newConnections.isNotEmpty) {
+        echo.connections = newConnections;
+        await echo.saveConnectionsToFirebase();
+      }
+      print(echo.userCount);
+      print('Saving connections matrix: $echo.connections');
 
       // Navigate or other logic
       Get.offNamed(AppRouter.profileScreen, arguments: user);
+
+
 
     } catch (e) {
       error = 'Registration failed: ${e.toString()}';
