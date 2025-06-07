@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-
+  await Echo.instance.initialize();
   Get.put(Echo());
   Get.put(UserController());
   runApp(const MyApp());

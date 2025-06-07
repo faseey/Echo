@@ -6,20 +6,27 @@ import 'bst.dart';
 
 
 class Echo extends GetxController {
+  static final Echo instance = Echo._internal();
+
+  Echo._internal(); // private constructor
+  factory Echo() => instance;
+
   static int userCount = 0;
   BST bst = BST();
   List<List<int>>? connections;
   static BSTNode? activeUser;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String connectionsDocId = "connections_matrix"; // document ID for adjacency matrix
+  final String connectionsDocId = "connections_matrix";
 
-  Echo() {
+  // Do not load in constructor
+  Future<void> initialize() async {
     userCount = 0;
     bst = BST();
     connections = null;
     activeUser = null;
-    bst.loadFromFirebase();
+    await bst.loadFromFirebase();
+    await loadConnectionsFromFirebase();
   }
 
   //  Find index of user in BST (in-order)
