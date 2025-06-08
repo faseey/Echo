@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import '../component/MyDrawer.dart';
 import '../controllers/home_controller.dart';
 
+// ... imports
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -30,7 +32,7 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
         child: Column(
           children: [
-            // Search bar + search button
+            // Search bar + Refresh
             Row(
               children: [
                 Expanded(
@@ -45,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                     onFieldSubmitted: (value) {
                       controller.loadRequestsFromFirestore();
-                      // Optional: You can add user search logic here if needed
                     },
                   ),
                 ),
@@ -69,7 +70,7 @@ class HomeScreen extends StatelessWidget {
 
             SizedBox(height: 16),
 
-            // Send friend request button
+            // Send Friend Request Button
             ElevatedButton.icon(
               onPressed: () async {
                 final username = controller.requestTextController.text.trim();
@@ -88,66 +89,12 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 16),
 
-            // Display all friend requests button
+            // Display Friend Requests Button
             ElevatedButton.icon(
               onPressed: () async {
                 await controller.loadRequestsFromFirestore();
-                if (controller.allRequests.isEmpty) {
-                  Get.snackbar("Info", "No pending friend requests");
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text("Pending Friend Requests"),
-                      content: Obx(() {
-                        return SizedBox(
-                          width: double.maxFinite,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.allRequests.length,
-                            itemBuilder: (context, index) {
-                              final senderUsername = controller.allRequests[index];
-                              return ListTile(
-                                leading: Icon(Icons.person),
-                                title: Text(senderUsername),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(Icons.check, color: Colors.green),
-                                      tooltip: "Accept",
-                                      onPressed: () async {
-                                        await controller.acceptRequestBySender(senderUsername);
-                                        // No immediate Get.back() here; UI updates automatically due to Obx
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
-                                      tooltip: "Delete",
-                                      onPressed: () async {
-                                        await controller.deleteRequestBySender(senderUsername);
-                                        // No immediate Get.back() here; UI updates automatically due to Obx
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Close"),
-                        )
-                      ],
-                    ),
-                  );
-
-                }
               },
               icon: Icon(Icons.list_alt),
               label: Text("Display Friend Requests"),
@@ -155,6 +102,51 @@ class HomeScreen extends StatelessWidget {
                 minimumSize: Size(double.infinity, 48),
                 backgroundColor: Colors.teal,
               ),
+            ),
+
+            SizedBox(height: 16),
+
+            // Friend Requests List
+            Expanded(
+              child: Obx(() {
+                final requests = controller.allRequest;
+                if (requests.isEmpty) {
+                  return Center(
+                    child: Text("No pending friend requests."),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: requests.length,
+                  itemBuilder: (context, index) {
+                    final senderUsername = requests[index];
+                    return Card(
+                      child: ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text("$senderUsername send you a friend request"),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.check, color: Colors.green),
+                              tooltip: "Accept",
+                              onPressed: () async {
+                                await controller.acceptRequestBySender(senderUsername);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              tooltip: "Delete",
+                              onPressed: () async {
+                                await controller.deleteRequestBySender(senderUsername);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),

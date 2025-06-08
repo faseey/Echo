@@ -19,7 +19,9 @@ class HomeController extends GetxController {
   User? get currentUser => activeUserNode?.user;
 
   // Observable list of friend requests for UI
-  final allRequests = <String>[].obs;
+  final allRequest = <String>[].obs;
+
+
 
   /// Send friend request
   Future<void> sendFriendRequest(String friendUsername) async {
@@ -33,6 +35,29 @@ class HomeController extends GetxController {
       Get.snackbar("Error", "User not found");
       return;
     }
+  if(friendUsername == currentUser?.username){
+    Get.snackbar("Error","YOU CANNOT send request to yourself");
+    return;
+  }
+    int senderIndex =  currentUser!.user_index;
+    int receiverIndex =  receiverNode.user.user_index;
+
+    if(Echo.connections?[senderIndex][receiverIndex] ==1 && Echo.connections?[receiverIndex][senderIndex] ==1 ){
+      Get.snackbar("Error","You are already friends with $friendUsername");
+      return;
+    }
+    else if(Echo.connections?[senderIndex][receiverIndex] ==1){
+      Get.snackbar("Error","You have already sent Friend Request  to  $friendUsername");
+      return;
+    }
+    if( Echo.connections![receiverIndex][senderIndex] ==1){
+      Get.snackbar("Error","$friendUsername has already sent you a friend request");
+      return;
+    }
+    else{
+      Echo.connections![senderIndex][receiverIndex] = 1;
+      await echo.saveConnectionsToFirebase();
+
 
     final request = Request(
       friendUsername: currentUser!.username,
@@ -46,6 +71,7 @@ class HomeController extends GetxController {
     await saveRequestsToFirestore(friendUsername);
 
     Get.snackbar("Success", "Friend request sent to $friendUsername");
+  }
   }
   Future<void> acceptRequestBySender(String senderUsername) async {
     if (currentUser == null) return;
@@ -65,13 +91,18 @@ class HomeController extends GetxController {
 
   Future<void> deleteRequestBySender(String senderUsername) async {
     if (currentUser == null) return;
+    final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
+    if (requestNode != null) {
 
-    currentUser!.requestQueue.deleteRequestBySender(senderUsername);
+      Echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 0;
+      await echo.saveConnectionsToFirebase();
+      currentUser!.requestQueue.deleteRequestBySender(senderUsername);
+      await saveRequestsToFirestore(currentUser!.username);
 
+      await loadRequestsFromFirestore();
+    }
 
-    await saveRequestsToFirestore(currentUser!.username);
-
-    await loadRequestsFromFirestore();  // Refresh requests list after update
+ // Refresh requests list after update
   }
 
 
@@ -102,11 +133,14 @@ class HomeController extends GetxController {
         final jsonList = doc.data()!['friendRequests'] as List<dynamic>? ?? [];
 
         currentUser!.requestQueue.loadFromJsonList(jsonList);
-        allRequests.value = currentUser!.requestQueue.displayAllRequests(fullMessage: false)
-        ;
+
+        allRequest.value = currentUser!.requestQueue.displayAllRequests(fullMessage: false);
+
+
       } else {
         currentUser!.requestQueue.clear();
-        allRequests.clear();
+        allRequest.clear();
+
       }
       update();
       log("Friend requests loaded from Firestore for ${currentUser!.username}");

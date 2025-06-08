@@ -94,8 +94,7 @@ class RequestQueue extends GetxController{
       rear = newNode;
     }
 
-    Echo.connections![request.senderIndex][request.receiverIndex] = 1;
-    await echo.saveConnectionsToFirebase();
+
   }
   List<String> displayAllRequests({bool fullMessage = true}) {
     List<String> requestsList = [];
@@ -164,12 +163,12 @@ class RequestQueue extends GetxController{
   }
 
   void deleteRequestBySender(String senderUsername) {
-    print("entering into funrion" + senderUsername);
+
 
 
     RequestNode? current = front;
     RequestNode? prev;
-    print(current?.request.friendUsername.toLowerCase().trim());
+
 
     while (current != null) {
       if (current.request.friendUsername.toLowerCase().trim() == senderUsername.toLowerCase().trim())
@@ -183,14 +182,14 @@ class RequestQueue extends GetxController{
         if (current == rear) {
           rear = prev;
         }
-  print("before break");
+
         break; // stop after deleting
       }
 
       prev = current;
       current = current.next;
     }
-    log("Remaining Requests: ${Echo.activeUser!.user.requestQueue.displayAllRequests()}");
+
   }
 
   RequestNode? getRequestBySender(String senderUsername) {
