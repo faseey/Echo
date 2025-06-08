@@ -11,7 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/bst.dart';
 import '../models/echo.dart';
-// ✅ new stack
+
 import '../models/post_model.dart';
 import '../user_data_model/userService.dart';
 
@@ -20,7 +20,7 @@ class NewPostController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   final textController = TextEditingController();
 
-  ImagePost? latestPost; // ✅ use ImagePost
+  ImagePost? latestPost;
 
   BSTNode? get activeUserNode => Echo.activeUser;
   User? get currentUser => activeUserNode?.user;
@@ -60,7 +60,7 @@ class NewPostController extends GetxController {
 
       latestPost = imagePost;
 
-      // ✅ Use imagePostStack
+
       activeUserNode!.user.imagePostStack.push(imagePost);
 
       await savePostsToFirestore();
@@ -95,23 +95,30 @@ class NewPostController extends GetxController {
   }
 
 
-  void deletePostAtIndex(int index) {
+  void deletePostAtIndex(int index) async {
     if (activeUserNode == null) return;
 
     final stack = activeUserNode!.user.postStack;
-    final reversed = stack.toList().reversed.toList();
 
-    reversed.removeAt(index); // remove image at index
-    stack.clear(); // clear current stack
+    // Convert to list, reverse, and remove post at index
+    final posts = stack.toList();
+    posts.removeAt(index);
 
-    // re-push remaining posts
-    for (var post in reversed.reversed) {
+    // Clear and re-push remaining posts
+    stack.clear();
+    for (var post in posts.reversed) {
       stack.push(post);
     }
 
-    savePostsToFirestore();
+
+    await _firestore.doc(activeUserNode!.user.username).update({
+      'posts': stack.toJsonList(),
+    });
+
     update();
+    Get.snackbar("Success", "Post deleted");
   }
+
 
 
   void clearLatestPost() {

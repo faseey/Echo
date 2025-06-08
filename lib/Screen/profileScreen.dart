@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:echo_app/component/route.dart';
@@ -10,30 +11,39 @@ import '../user_data_model/userService.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
+  void _showFullImage(BuildContext context, String base64Image) {
+    final imageBytes = base64Decode(base64Image);
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        child: InteractiveViewer(
+          child: Image.memory(imageBytes),
+        ),
+      ),
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProfileController());
     controller.initializeUser();
+    final imagePosts = controller.getUserImagePosts();
 
     final user = Get.arguments;
 
     if (user == null || user is! User) {
-      return const Scaffold(
-        body: Center(child: Text("User data not found.")),
-      );
+      return const Scaffold(body: Center(child: Text("User data not found.")));
     }
 
     return GetBuilder<ProfileController>(
       builder: (_) {
         return Scaffold(
-
           appBar: AppBar(
-
+            automaticallyImplyLeading: false,
             title: const Center(
-              child: Text(
-                "Profile",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: Text("Profile", style: TextStyle(color: Colors.black)),
             ),
           ),
           body: SingleChildScrollView(
@@ -42,24 +52,24 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-
-
                     Center(
                       child: Stack(
                         children: [
                           CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.grey.shade300,
-                            backgroundImage: controller.imagePath.isNotEmpty
-                                ? FileImage(File(controller.imagePath))
-                                : (controller.imageUrl.isNotEmpty
-                                ? NetworkImage(controller.imageUrl)
-                            as ImageProvider
-                                : null),
-                            child: (controller.imagePath.isEmpty &&
-                                controller.imageUrl.isEmpty)
-                                ? const Icon(Icons.person, size: 50)
-                                : null,
+                            backgroundImage:
+                                controller.imagePath.isNotEmpty
+                                    ? FileImage(File(controller.imagePath))
+                                    : (controller.imageBase64.isNotEmpty
+                                        ? NetworkImage(controller.imageBase64)
+                                            as ImageProvider
+                                        : null),
+                            child:
+                                (controller.imagePath.isEmpty &&
+                                        controller.imageBase64.isEmpty)
+                                    ? const Icon(Icons.person, size: 50)
+                                    : null,
                           ),
                           Positioned(
                             bottom: 2,
@@ -92,15 +102,16 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       user.username,
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       controller.bio.isNotEmpty
                           ? "@${controller.bio}"
                           : 'No bio added',
-                      style: const TextStyle(
-                          fontSize: 15,),
+                      style: const TextStyle(fontSize: 15),
                     ),
                   ],
                 ),
@@ -108,27 +119,41 @@ class ProfileScreen extends StatelessWidget {
                 const Divider(thickness: 1),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text("Posts",
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    "Posts",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                if (controller.getPostsList().isEmpty)
-                  const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text("No posts yet"),
-                    ),
-                  )
+
+                if (imagePosts.isEmpty)                               // ← new
+                  const Center(child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("No image posts yet"),
+                  ))
                 else
-                  ...controller.getPostsList().map(
-                        (post) => Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text(post.content),
-                        subtitle: Text("Posted on: ${post.date}"),
-                      ),
+                  GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    shrinkWrap: true,                      // important inside Column
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: imagePosts.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 6,
+                      mainAxisSpacing: 6,
+                      childAspectRatio: 0.8,
                     ),
+                    itemBuilder: (_, index) {
+                      final post = imagePosts[index];
+                      final bytes = base64Decode(post.imageBase64);
+
+                      return GestureDetector(
+                        onTap: () => _showFullImage(context, post.imageBase64),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.memory(bytes, fit: BoxFit.cover),
+                        ),
+                      );
+                    },
                   ),
                 const SizedBox(height: 20),
               ],
@@ -139,8 +164,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(
-      BuildContext context, ProfileController controller) {
+  void _showBottomSheet(BuildContext context, ProfileController controller) {
     final bioController = TextEditingController(text: controller.bio);
 
     showModalBottomSheet(
@@ -152,10 +176,11 @@ class ProfileScreen extends StatelessWidget {
       builder: (_) {
         return Padding(
           padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-              left: 20,
-              right: 20,
-              top: 20),
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 20,
+            right: 20,
+            top: 20,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -181,9 +206,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                controller.bio.isNotEmpty
-                    ? controller.bio
-                    : 'No bio added',
+                controller.bio.isNotEmpty ? controller.bio : 'No bio added',
                 style: const TextStyle(fontSize: 16),
               ),
             ],
