@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import 'echo.dart';
 
 enum RequestStatus { pending, accepted, rejected }
@@ -68,13 +70,15 @@ class AcceptedRequest {
   AcceptedRequest({required this.senderIndex, required this.isAccepted});
 }
 
-class RequestQueue {
+class RequestQueue extends GetxController{
   RequestNode? front;
   RequestNode? rear;
 
   RequestQueue();
 
-  void addRequest(Request request) {
+  Future<void> addRequest(Request request) async {
+
+    final Echo echo = Get.find<Echo>();
     if (request.senderIndex < 0 || request.receiverIndex < 0 || Echo.connections == null) {
       return;
     }
@@ -89,6 +93,7 @@ class RequestQueue {
     }
 
     Echo.connections![request.senderIndex][request.receiverIndex] = 1;
+    await echo.saveConnectionsToFirebase();
   }
 
   List<String> displayAllRequests() {
@@ -118,7 +123,9 @@ class RequestQueue {
   /// If acceptAll = true, accept all pending requests.
   /// If false, reject all pending requests.
   /// Returns list of AcceptedRequest for accepted ones.
-  List<AcceptedRequest> showRequests(bool acceptAll) {
+  Future<List<AcceptedRequest>> showRequests(bool acceptAll) async {
+
+    final Echo echo = Get.find<Echo>();
     List<AcceptedRequest> acceptedRequests = [];
 
     if (front == null) {
@@ -132,6 +139,7 @@ class RequestQueue {
           current.request.status = RequestStatus.accepted;
           Echo.connections![current.request.senderIndex][current.request.receiverIndex] = 1;
           Echo.connections![current.request.receiverIndex][current.request.senderIndex] = 1;
+
           acceptedRequests.add(
             AcceptedRequest(senderIndex: current.request.senderIndex, isAccepted: true),
           );
@@ -141,6 +149,7 @@ class RequestQueue {
       }
       current = current.next;
     }
+    await echo.saveConnectionsToFirebase();
     return acceptedRequests;
   }
 
@@ -159,10 +168,18 @@ class RequestQueue {
   void loadFromJsonList(List<dynamic> jsonList) {
     front = null;
     rear = null;
+
     for (var reqJson in jsonList) {
       Request req = Request.fromJson(reqJson);
-      addRequest(req);
+      // Directly create nodes without calling addRequest()
+      RequestNode newNode = RequestNode(request: req);
+
+      if (rear == null) {
+        front = rear = newNode;
+      } else {
+        rear!.next = newNode;
+        rear = newNode;
+      }
     }
   }
-
 }
