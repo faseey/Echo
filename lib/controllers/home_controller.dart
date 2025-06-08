@@ -78,16 +78,21 @@ class HomeController extends GetxController {
 
     final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
     if (requestNode != null) {
+      // Step 1: Accept connection in Echo matrix
       Echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
       Echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
       await echo.saveConnectionsToFirebase();
 
+      // Step 2: Add each other to friendList in Firestore
+      await addFriendsToEachOther(currentUser!.username, senderUsername);
+
+      // Step 3: Remove request and update
       currentUser!.requestQueue.deleteRequestBySender(senderUsername);
       await saveRequestsToFirestore(currentUser!.username);
-
-      await loadRequestsFromFirestore();  // Refresh requests list after update
+      await loadRequestsFromFirestore();
     }
   }
+
 
   Future<void> deleteRequestBySender(String senderUsername) async {
     if (currentUser == null) return;
@@ -105,6 +110,33 @@ class HomeController extends GetxController {
  // Refresh requests list after update
   }
 
+  Future<void> addFriendsToEachOther(String user1, String user2) async {
+    final firestore = FirebaseFirestore.instance;
+
+    Future<List<String>> getFriendList(String username) async {
+      final doc = await firestore.collection('users').doc(username).get();
+      final data = doc.data();
+      if (data != null && data.containsKey('friendList')) {
+        return List<String>.from(data['friendList']);
+      }
+      return [];
+    }
+
+    Future<void> updateFriendList(String username, List<String> updatedList) async {
+      await firestore.collection('users').doc(username).update({
+        'friendList': updatedList,
+      });
+    }
+
+    List<String> user1List = await getFriendList(user1);
+    List<String> user2List = await getFriendList(user2);
+
+    if (!user1List.contains(user2)) user1List.add(user2);
+    if (!user2List.contains(user1)) user2List.add(user1);
+
+    await updateFriendList(user1, user1List);
+    await updateFriendList(user2, user2List);
+  }
 
   /// Save friend requests of the user to Firestore
   Future<void> saveRequestsToFirestore(String username) async {
