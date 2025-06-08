@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/MyDrawer.dart';
 import '../controllers/home_controller.dart';
- // Your new controller
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -109,9 +108,31 @@ class HomeScreen extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: controller.allRequests.length,
                             itemBuilder: (context, index) {
+                              final senderUsername = controller.allRequests[index];
                               return ListTile(
                                 leading: Icon(Icons.person),
-                                title: Text(controller.allRequests[index]),
+                                title: Text(senderUsername),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.check, color: Colors.green),
+                                      tooltip: "Accept",
+                                      onPressed: () async {
+                                        await controller.acceptRequestBySender(senderUsername);
+                                        // No immediate Get.back() here; UI updates automatically due to Obx
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      tooltip: "Delete",
+                                      onPressed: () async {
+                                        await controller.deleteRequestBySender(senderUsername);
+                                        // No immediate Get.back() here; UI updates automatically due to Obx
+                                      },
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                           ),
@@ -125,6 +146,7 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   );
+
                 }
               },
               icon: Icon(Icons.list_alt),

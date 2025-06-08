@@ -3,13 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/bst.dart';
 import '../models/echo.dart';
 import '../models/friendlist.dart'; // your RequestQueue and Request models
-import '../models/bst.dart';
+
 import '../user_data_model/userService.dart';
 
 class HomeController extends GetxController {
   final requestTextController = TextEditingController();
+  final Echo echo = Get.find<Echo>();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -45,6 +47,33 @@ class HomeController extends GetxController {
 
     Get.snackbar("Success", "Friend request sent to $friendUsername");
   }
+  Future<void> acceptRequestBySender(String senderUsername) async {
+    if (currentUser == null) return;
+
+    final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
+    if (requestNode != null) {
+      Echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
+      Echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
+      await echo.saveConnectionsToFirebase();
+
+      currentUser!.requestQueue.deleteRequestBySender(senderUsername);
+      await saveRequestsToFirestore(currentUser!.username);
+
+      await loadRequestsFromFirestore();  // Refresh requests list after update
+    }
+  }
+
+  Future<void> deleteRequestBySender(String senderUsername) async {
+    if (currentUser == null) return;
+
+    currentUser!.requestQueue.deleteRequestBySender(senderUsername);
+
+
+    await saveRequestsToFirestore(currentUser!.username);
+
+    await loadRequestsFromFirestore();  // Refresh requests list after update
+  }
+
 
   /// Save friend requests of the user to Firestore
   Future<void> saveRequestsToFirestore(String username) async {
@@ -73,7 +102,8 @@ class HomeController extends GetxController {
         final jsonList = doc.data()!['friendRequests'] as List<dynamic>? ?? [];
 
         currentUser!.requestQueue.loadFromJsonList(jsonList);
-        allRequests.value = currentUser!.requestQueue.displayAllRequests();
+        allRequests.value = currentUser!.requestQueue.displayAllRequests(fullMessage: false)
+        ;
       } else {
         currentUser!.requestQueue.clear();
         allRequests.clear();

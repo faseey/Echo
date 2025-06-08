@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 import 'echo.dart';
@@ -95,28 +97,23 @@ class RequestQueue extends GetxController{
     Echo.connections![request.senderIndex][request.receiverIndex] = 1;
     await echo.saveConnectionsToFirebase();
   }
-
-  List<String> displayAllRequests() {
+  List<String> displayAllRequests({bool fullMessage = true}) {
     List<String> requestsList = [];
 
-    if (front == null) {
-      return requestsList;
-    }
+    if (front == null) return requestsList;
 
     RequestNode? current = front;
     while (current != null) {
-      final r = current.request;
-      // Convert each request to a readable string format
-      String statusStr = requestStatusToString(r.status);
+      final username = current.request.friendUsername;
       requestsList.add(
-          'Request from ${r.friendUsername} (senderIndex: ${r.senderIndex}) '
-              'to receiverIndex: ${r.receiverIndex} - Status: $statusStr'
+          fullMessage ? '$username sent you a friend request' : username
       );
       current = current.next;
     }
 
     return requestsList;
   }
+
 
 
   /// Processes all pending requests:
@@ -165,6 +162,49 @@ class RequestQueue extends GetxController{
     }
     return jsonList;
   }
+
+  void deleteRequestBySender(String senderUsername) {
+    print("entering into funrion" + senderUsername);
+
+
+    RequestNode? current = front;
+    RequestNode? prev;
+    print(current?.request.friendUsername.toLowerCase().trim());
+
+    while (current != null) {
+      if (current.request.friendUsername.toLowerCase().trim() == senderUsername.toLowerCase().trim())
+      {
+        if (prev == null) {
+          front = current.next;
+        } else {
+          prev.next = current.next;
+        }
+
+        if (current == rear) {
+          rear = prev;
+        }
+  print("before break");
+        break; // stop after deleting
+      }
+
+      prev = current;
+      current = current.next;
+    }
+    log("Remaining Requests: ${Echo.activeUser!.user.requestQueue.displayAllRequests()}");
+  }
+
+  RequestNode? getRequestBySender(String senderUsername) {
+    RequestNode? current = front;
+    while (current != null) {
+      if (current.request.friendUsername == senderUsername) {
+        return current;
+      }
+      current = current.next;
+    }
+    return null;
+  }
+
+
   void loadFromJsonList(List<dynamic> jsonList) {
     front = null;
     rear = null;
