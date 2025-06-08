@@ -9,7 +9,7 @@ import '../models/friendlist.dart'; // your RequestQueue and Request models
 
 import '../user_data_model/userService.dart';
 
-class HomeController extends GetxController {
+class FriendController extends GetxController {
   final requestTextController = TextEditingController();
   final Echo echo = Get.find<Echo>();
 
@@ -137,6 +137,24 @@ class HomeController extends GetxController {
     await updateFriendList(user1, user1List);
     await updateFriendList(user2, user2List);
   }
+  RxList<String> friendUsernames = <String>[].obs;
+
+  Future<void> loadFriendListFromFirestore(String username) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      final doc = await firestore.collection('users').doc(username).get();
+      final data = doc.data();
+
+      if (data != null && data.containsKey('friendList')) {
+        friendUsernames.value = List<String>.from(data['friendList']);
+      } else {
+        friendUsernames.clear(); // If no list found
+      }
+    } catch (e) {
+      print("Failed to load friend list: $e");
+    }
+  }
 
   /// Save friend requests of the user to Firestore
   Future<void> saveRequestsToFirestore(String username) async {
@@ -186,4 +204,12 @@ class HomeController extends GetxController {
     requestTextController.dispose();
     super.onClose();
   }
+  @override
+  void onInit() {
+    super.onInit();
+    if (currentUser != null) {
+      loadFriendListFromFirestore(currentUser!.username);
+    }
+  }
+
 }
