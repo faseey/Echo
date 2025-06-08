@@ -26,11 +26,12 @@ class ProfileScreen extends StatelessWidget {
     return GetBuilder<ProfileController>(
       builder: (_) {
         return Scaffold(
+
           appBar: AppBar(
-            backgroundColor: Colors.grey.shade300,
+
             title: const Center(
               child: Text(
-                "Profile Screen",
+                "Profile",
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -39,70 +40,69 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.grey.shade300,
-                              backgroundImage: controller.imagePath.isNotEmpty
-                                  ? FileImage(File(controller.imagePath))
-                                  : (controller.imageUrl.isNotEmpty
-                                  ? NetworkImage(controller.imageUrl)
-                              as ImageProvider
-                                  : null),
-                              child: (controller.imagePath.isEmpty &&
-                                  controller.imageUrl.isEmpty)
-                                  ? const Icon(Icons.person, size: 50)
-                                  : null,
-                            ),
-                            Positioned(
-                              bottom: 2,
-                              right: 2,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: const BoxDecoration(
-                                  color: Colors.grey,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      _showBottomSheet(context, controller);
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
-                                      size: 15,
-                                      color: Colors.white,
-                                    ),
+                Column(
+                  children: [
+
+
+                    Center(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey.shade300,
+                            backgroundImage: controller.imagePath.isNotEmpty
+                                ? FileImage(File(controller.imagePath))
+                                : (controller.imageUrl.isNotEmpty
+                                ? NetworkImage(controller.imageUrl)
+                            as ImageProvider
+                                : null),
+                            child: (controller.imagePath.isEmpty &&
+                                controller.imageUrl.isEmpty)
+                                ? const Icon(Icons.person, size: 50)
+                                : null,
+                          ),
+                          Positioned(
+                            bottom: 2,
+                            right: 2,
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: const BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  onPressed: () {
+                                    _showBottomSheet(context, controller);
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 15,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        user.username,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        controller.bio.isNotEmpty
-                            ? controller.bio
-                            : 'No bio added',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      user.username,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      controller.bio.isNotEmpty
+                          ? "@${controller.bio}"
+                          : 'No bio added',
+                      style: const TextStyle(
+                          fontSize: 15,),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 const Divider(thickness: 1),

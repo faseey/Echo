@@ -1,4 +1,5 @@
 import 'package:echo_app/Screen/LoginScreen.dart';
+import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/register_controller.dart';
@@ -217,10 +218,8 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  Get.toNamed(AppRouter.loginScreen);
+
                 },
                 child: Center(
                   child: RichText(

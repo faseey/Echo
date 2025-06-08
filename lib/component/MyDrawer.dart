@@ -1,4 +1,5 @@
 
+import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -27,6 +28,11 @@ class MyDrawer extends StatelessWidget {
             leading: const Icon(Icons.person),
             title: const Text('P R O F I L E'),
             onTap: () => Get.toNamed('/profile'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('P O S T'),
+            onTap: () => Get.toNamed(AppRouter.newPostScreen),
           ),
           ListTile(
             leading: const Icon(Icons.logout),

@@ -1,68 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../Screen/friendscreen.dart';
+import '../Screen/new_post_screen.dart';
 import '../Screen/postScreen.dart';
 import '../Screen/profileScreen.dart';
 
-class Bottomnavbar extends StatelessWidget {
-  Bottomnavbar({Key? key}) : super(key: key);
+class Bottomnavbar extends StatefulWidget {
+  const Bottomnavbar({Key? key}) : super(key: key);
 
-  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+  @override
+  State<Bottomnavbar> createState() => _BottomnavbarState();
+}
 
-  // Define screens list directly (alternative to _buildScreens method)
+class _BottomnavbarState extends State<Bottomnavbar> {
+  int _currentIndex = 0;
+
   final List<Widget> _screens = [
-
     Center(child: Text("News Feed")),
     FriendScreen(),
-    PostScreen(),
+    NewPostScreen(),
+    //PostScreen(),
     Center(child: Text("Inbox")),
     ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _screens, // Use the list directly
-      items: _navBarItems(),
-      navBarStyle: NavBarStyle.style3,
-      backgroundColor: Colors.white,
+    return Scaffold(
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _currentIndex,
+        height: 60,
+        backgroundColor: Colors.transparent,
+        color: Colors.white,
+        buttonBackgroundColor: Colors.white,
+        animationDuration: const Duration(milliseconds: 300),
+        items: const <Widget>[
+          Icon(Icons.home, size: 30, color: Colors.black),
+          Icon(Icons.group, size: 30, color: Colors.black),
+          Icon(Icons.add_box, size: 30, color: Colors.black),
+          Icon(Icons.inbox, size: 30, color: Colors.black),
+          Icon(Icons.person, size: 30, color: Colors.black),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
+      body: _screens[_currentIndex],
     );
-  }
-
-  List<PersistentBottomNavBarItem> _navBarItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.black,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.group),
-        title: "Friends",
-        activeColorPrimary: Colors.black,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.add_box, size: 28),
-        title: "Add",
-        activeColorPrimary: Colors.black,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.inbox),
-        title: "Inbox",
-        activeColorPrimary: Colors.black,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.person),
-        title: "Profile",
-        activeColorPrimary: Colors.black,
-        inactiveColorPrimary: Colors.grey,
-      ),
-    ];
   }
 }

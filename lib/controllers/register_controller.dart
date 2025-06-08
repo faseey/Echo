@@ -57,7 +57,7 @@ class UserController extends GetxController {
       update();
     }
   }
-  Future<void> logIn(String userName, String password) async {
+  /*Future<void> logIn(String userName, String password) async {
     // Clear previous errors
     error = '';
     update();
@@ -101,7 +101,61 @@ class UserController extends GetxController {
 
       update();
       // Navigate with guaranteed non-null user
-      Get.offNamed(
+      Get.toNamed(
+        AppRouter.bottomnavbar,
+        arguments: node.user,
+      );
+
+    } catch (e) {
+      error = 'Login failed: ${e.toString()}';
+      update();
+    }
+  }*/
+
+  Future<void> logIn(String userName, String password) async {
+    error = '';
+    update();
+
+    if (userName.isEmpty || password.isEmpty) {
+      error = 'Please fill all fields';
+      update();
+      return;
+    }
+
+    try {
+      final node = echo.bst.search(userName.trim());
+
+      if (node == null) {
+        error = 'Invalid username';
+        update();
+        return;
+      }
+
+      if (node.user.password != password) {
+        error = 'Incorrect password';
+        update();
+        return;
+      }
+
+      final now = DateTime.now().toString();
+      node.user.lastSignin = now;
+
+      await userCollection.doc(userName.trim()).update({
+        'lastSignIn': now,
+        'lastSignin': now,
+      });
+
+      if (node.user.username.isEmpty) {
+        throw Exception("User data corrupted");
+      }
+
+      print("Login Successful");
+      isLoggedIn = true;
+      Echo.activeUser = node;
+
+      update();
+      print("Navigating to bottomnavbar...");
+      Get.toNamed(
         AppRouter.bottomnavbar,
         arguments: node.user,
       );
@@ -111,6 +165,7 @@ class UserController extends GetxController {
       update();
     }
   }
+
 
   Future<void> logOut() async {
     try {

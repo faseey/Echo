@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../Screen/LoginScreen.dart';
 import '../Screen/friendscreen.dart';
+import '../Screen/new_post_screen.dart';
 import '../Screen/postScreen.dart';
 import '../Screen/profileScreen.dart';
 import '../Screen/registerScreen.dart';
@@ -15,6 +16,7 @@ class AppRouter{
   static const profileScreen = "/profileScreen";
   static const bottomnavbar = "/bottomnavbar";
   static const friendscreen = "/friendscreen";
+  static const newPostScreen = "/newPostScreen";
 
 
   static final route = [
@@ -23,6 +25,7 @@ class AppRouter{
     GetPage(name: postScreen, page: ()=>PostScreen()),
     GetPage(name: profileScreen, page: ()=>ProfileScreen()),
     GetPage(name: friendscreen, page: ()=>FriendScreen()),
+    GetPage(name: newPostScreen, page: ()=>NewPostScreen()),
     GetPage(name: bottomnavbar, page: ()=>Bottomnavbar()),
 
 

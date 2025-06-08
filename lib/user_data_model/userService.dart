@@ -1,4 +1,5 @@
 import '../models/friendlist.dart';
+import '../models/post_model.dart';
 import '../models/poststack.dart';
 
 class User {
@@ -15,6 +16,9 @@ class User {
   int user_index;  // <-- keep as is
   PostStack postStack;
   RequestQueue requestQueue;
+  ImagePostStack imagePostStack;
+
+
 
   User({
     required this.username,
@@ -30,8 +34,13 @@ class User {
     this.user_index = -1,  // <-- default value
     PostStack? postStack,
     RequestQueue? requestQueue,
+    ImagePostStack? imagePostStack,
   })  : postStack = postStack ?? PostStack(),
-        requestQueue = requestQueue ?? RequestQueue();
+        requestQueue = requestQueue ?? RequestQueue(),
+        imagePostStack = imagePostStack ?? ImagePostStack();
+
+
+
 
   Map<String, dynamic> toJson() => {
     'username': username,

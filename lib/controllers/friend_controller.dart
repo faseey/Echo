@@ -26,7 +26,7 @@ class FriendController extends GetxController {
   /// Send friend request
   Future<void> sendFriendRequest(String friendUsername) async {
     if (currentUser == null) {
-      Get.snackbar("Error", "No active user");
+      Get.snackbar("Error", "No active user",backgroundColor: Color(0xfffffff),duration: Duration(seconds: 2),colorText: Color(0xffffffff));
       return;
     }
 
