@@ -37,7 +37,7 @@ class UserController extends GetxController {
 
       // Assign only if non-empty (optional check)
       if (newConnections.isNotEmpty) {
-        echo.connections = newConnections;
+        Echo.connections = newConnections;
         await echo.saveConnectionsToFirebase();
       }
 

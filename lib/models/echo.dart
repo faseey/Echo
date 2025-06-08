@@ -13,7 +13,7 @@ class Echo extends GetxController {
 
   static int userCount = 0;
   BST bst = BST();
-  List<List<int>>? connections;
+  static List<List<int>>? connections;
   static BSTNode? activeUser;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

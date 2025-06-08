@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/friendlist.dart';
 import '../models/poststack.dart';
+
 
 class User {
   String username;
@@ -17,7 +19,8 @@ class User {
   String gender;
   String profileImageUrl;
   String bio;
-  PostStack postStack; // new field
+  PostStack postStack;       // posts
+  RequestQueue requestList;   // friend requests
 
   User({
     required this.username,
@@ -31,7 +34,9 @@ class User {
     this.profileImageUrl = '',
     this.bio = '',
     PostStack? postStack,
-  }) : postStack = postStack ?? PostStack(); // initialize empty if null
+    RequestQueue? requestList,
+  })  : postStack = postStack ?? PostStack(),
+        requestList = requestList ?? RequestQueue();
 
   Map<String, dynamic> toJson() => {
     'username': username,
@@ -44,13 +49,19 @@ class User {
     'gender': gender,
     'profileImageUrl': profileImageUrl,
     'bio': bio,
-    'posts': postStack.toJsonList(), // Save posts to Firebase
+    'posts': postStack.toJsonList(),
+    'friendRequests': requestList.toJsonList(),
   };
 
   static User fromJson(Map<String, dynamic> json) {
     final postStack = PostStack();
     if (json['posts'] != null) {
       postStack.loadFromJsonList(json['posts']);
+    }
+
+    final requestList = RequestQueue();
+    if (json['friendRequests'] != null) {
+      requestList.loadFromJsonList(json['friendRequests']);
     }
 
     return User(
@@ -65,6 +76,7 @@ class User {
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
       postStack: postStack,
+      requestList: requestList,
     );
   }
 }
