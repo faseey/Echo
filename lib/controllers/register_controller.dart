@@ -32,6 +32,10 @@ class UserController extends GetxController {
 
       // Optionally set activeUser here if you want
       Echo.activeUser = echo.bst.search(user.username) ;
+      Echo.activeUser?.user.user_index =  Echo.userCount ;
+      await userCollection.doc(user.username).update({
+        'user_index': Echo.userCount,
+      });
       Echo.userCount++;
       final newConnections = await echo.getUpdatedConnections();
 

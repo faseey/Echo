@@ -91,20 +91,28 @@ class RequestQueue {
     Echo.connections![request.senderIndex][request.receiverIndex] = 1;
   }
 
+  List<String> displayAllRequests() {
+    List<String> requestsList = [];
 
-  void displayAllRequests() {
     if (front == null) {
-      return;
+      return requestsList;
     }
+
     RequestNode? current = front;
-    int index = 0;
     while (current != null) {
       final r = current.request;
-      // Add logging here if needed instead of print
+      // Convert each request to a readable string format
+      String statusStr = requestStatusToString(r.status);
+      requestsList.add(
+          'Request from ${r.friendUsername} (senderIndex: ${r.senderIndex}) '
+              'to receiverIndex: ${r.receiverIndex} - Status: $statusStr'
+      );
       current = current.next;
-      index++;
     }
+
+    return requestsList;
   }
+
 
   /// Processes all pending requests:
   /// If acceptAll = true, accept all pending requests.

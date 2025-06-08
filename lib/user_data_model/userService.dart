@@ -1,12 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path_provider/path_provider.dart';
-
 import '../models/friendlist.dart';
 import '../models/poststack.dart';
-
 
 class User {
   String username;
@@ -19,8 +12,9 @@ class User {
   String gender;
   String profileImageUrl;
   String bio;
-  PostStack postStack;       // posts
-  RequestQueue requestList;   // friend requests
+  int user_index;  // <-- keep as is
+  PostStack postStack;
+  RequestQueue requestQueue;
 
   User({
     required this.username,
@@ -33,10 +27,11 @@ class User {
     required this.gender,
     this.profileImageUrl = '',
     this.bio = '',
+    this.user_index = -1,  // <-- default value
     PostStack? postStack,
-    RequestQueue? requestList,
+    RequestQueue? requestQueue,
   })  : postStack = postStack ?? PostStack(),
-        requestList = requestList ?? RequestQueue();
+        requestQueue = requestQueue ?? RequestQueue();
 
   Map<String, dynamic> toJson() => {
     'username': username,
@@ -49,8 +44,9 @@ class User {
     'gender': gender,
     'profileImageUrl': profileImageUrl,
     'bio': bio,
+    'user_index': user_index,      // <-- add here
     'posts': postStack.toJsonList(),
-    'friendRequests': requestList.toJsonList(),
+    'friendRequests': requestQueue.toJsonList(),
   };
 
   static User fromJson(Map<String, dynamic> json) {
@@ -75,8 +71,9 @@ class User {
       gender: json['gender'] ?? '',
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
+      user_index: json['user_index'] ?? -1,  // <-- add here, default -1
       postStack: postStack,
-      requestList: requestList,
+      requestQueue: requestList,
     );
   }
 }
