@@ -91,4 +91,6 @@ class PostController extends GetxController {
       log("Error saving posts: $e");
     }
   }
+
+
 }

@@ -55,9 +55,9 @@ class User {
       postStack.loadFromJsonList(json['posts']);
     }
 
-    final requestList = RequestQueue();
+    final requestQueue = RequestQueue();
     if (json['friendRequests'] != null) {
-      requestList.loadFromJsonList(json['friendRequests']);
+      requestQueue.loadFromJsonList(json['friendRequests']);
     }
 
     return User(
@@ -73,7 +73,7 @@ class User {
       bio: json['bio'] ?? '',
       user_index: json['user_index'] ?? -1,  // <-- add here, default -1
       postStack: postStack,
-      requestQueue: requestList,
+      requestQueue: requestQueue,
     );
   }
 }

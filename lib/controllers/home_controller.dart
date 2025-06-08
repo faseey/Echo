@@ -53,24 +53,25 @@ class HomeController extends GetxController {
 
     try {
       final jsonList = node.user.requestQueue.toJsonList();
-      await _firestore.collection('friendRequests').doc(username).set({
-        'requests': jsonList,
+      await _firestore.collection('users').doc(node.user.username).update({
+        'friendRequests': jsonList,
       });
       log("Friend requests saved to Firestore for user $username");
     } catch (e) {
       log("Failed to save friend requests: $e");
     }
   }
-
   /// Load friend requests from Firestore for the current user
   Future<void> loadRequestsFromFirestore() async {
     if (currentUser == null) return;
 
     try {
-      final doc = await _firestore.collection('friendRequests').doc(currentUser!.username).get();
+      final doc = await _firestore.collection('users').doc(currentUser!.username).get();
+
 
       if (doc.exists && doc.data() != null) {
-        final jsonList = doc.data()!['requests'] as List<dynamic>? ?? [];
+        final jsonList = doc.data()!['friendRequests'] as List<dynamic>? ?? [];
+
         currentUser!.requestQueue.loadFromJsonList(jsonList);
         allRequests.value = currentUser!.requestQueue.displayAllRequests();
       } else {
