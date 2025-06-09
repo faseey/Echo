@@ -8,6 +8,7 @@ import 'Screen/registerScreen.dart';
 import 'component/bottomNavbar.dart';
 import 'component/route.dart';
 
+import 'controllers/MessageController.dart';
 import 'controllers/register_controller.dart';
 import 'models/echo.dart';
 
@@ -18,6 +19,7 @@ void main() async {
   await Echo.instance.initialize();
   Get.put(Echo());
   Get.put(UserController());
+  Get.put(MessageController());
   runApp(const MyApp());
 }
 
