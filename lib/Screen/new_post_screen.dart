@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../component/MyDrawer.dart';
 import '../controllers/new_post_cont.dart';
 import '../models/post_model.dart';
- // Assuming this is your image post model file
+// Assuming this is your image post model file
 
 class NewPostScreen extends StatelessWidget {
   NewPostScreen({Key? key}) : super(key: key);

@@ -2,24 +2,28 @@
 
 class ImagePost {
   final String username;
+  final String content;
   final String imageBase64;
   final String date;
 
   ImagePost({
     required this.username,
+    required this.content,
     required this.imageBase64,
     required this.date,
   });
 
   Map<String, dynamic> toJson() => {
     'username': username,
+    'content': content,
     'imageBase64': imageBase64,
     'date': date,
   };
 
   factory ImagePost.fromJson(Map<String, dynamic> json) => ImagePost(
     username: json['username'],
-    imageBase64: json['imageBase64'],
+    content: json['content'],
+    imageBase64: json['imageBase64'] ?? '',
     date: json['date'],
   );
 }

@@ -129,14 +129,14 @@ class ProfileController extends GetxController {
     update();
   }
 
-  List<Post> getPostsList() {
+  List<ImagePost> getPostsList() {
     if (activeUserNode == null) return [];
-    return activeUserNode!.user.postStack.toList();
+    return activeUserNode!.user.imagePostStack.toList();
   }
 
   void clearPosts() {
     if (activeUserNode == null) return;
-    activeUserNode!.user.postStack.clear();
+    activeUserNode!.user.imagePostStack.clear();
     update();
   }
 
@@ -145,7 +145,7 @@ class ProfileController extends GetxController {
     if (currentUser == null || activeUserNode == null) return;
 
     try {
-      final postsJsonList = activeUserNode!.user.postStack.toJsonList();
+      final postsJsonList = activeUserNode!.user.imagePostStack.toJsonList();
       await _firestore.collection('users').doc(currentUser!.username).update({
         'posts': postsJsonList,
       });
@@ -163,8 +163,8 @@ class ProfileController extends GetxController {
       final doc = await _firestore.collection('users').doc(currentUser!.username).get();
       if (doc.exists) {
         final postsJsonList = doc.data()?['posts'] as List<dynamic>? ?? [];
-        activeUserNode!.user.postStack.clear();
-        activeUserNode!.user.postStack.loadFromJsonList(postsJsonList);
+        activeUserNode!.user.imagePostStack.clear();
+        activeUserNode!.user.imagePostStack.loadFromJsonList(postsJsonList);
         update();
       }
     } catch (e) {
@@ -269,24 +269,24 @@ class ProfileController extends GetxController {
       return;
     }
 
-    final newPost = Post(
+    final newPost = ImagePost(
       username: currentUser!.username,
       content: content,
-      date: date,
+      date: date, imageBase64: '',
     );
 
-    activeUserNode!.user.postStack.push(newPost);
+    activeUserNode!.user.imagePostStack.push(newPost);
     update();
   }
 
-  List<Post> getPostsList() {
+  List<ImagePost> getPostsList() {
     if (activeUserNode == null) return [];
-    return activeUserNode!.user.postStack.toList();
+    return activeUserNode!.user.imagePostStack.toList();
   }
 
   void clearPosts() {
     if (activeUserNode == null) return;
-    activeUserNode!.user.postStack.clear();
+    activeUserNode!.user.imagePostStack.clear();
     update();
   }
 
@@ -294,7 +294,7 @@ class ProfileController extends GetxController {
     if (currentUser == null || activeUserNode == null) return;
 
     try {
-      final postsJsonList = activeUserNode!.user.postStack.toJsonList();
+      final postsJsonList = activeUserNode!.user.imagePostStack.toJsonList();
       await _firestore.collection('users').doc(currentUser!.username).update({
         'posts': postsJsonList,
       });
@@ -312,8 +312,8 @@ class ProfileController extends GetxController {
           await _firestore.collection('users').doc(currentUser!.username).get();
       if (doc.exists) {
         final postsJsonList = doc.data()?['posts'] as List<dynamic>? ?? [];
-        activeUserNode!.user.postStack.clear();
-        activeUserNode!.user.postStack.loadFromJsonList(postsJsonList);
+        activeUserNode!.user.imagePostStack.clear();
+        activeUserNode!.user.imagePostStack.loadFromJsonList(postsJsonList);
         update();
       }
     } catch (e) {

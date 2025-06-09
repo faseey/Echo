@@ -56,6 +56,7 @@ class NewPostController extends GetxController {
         username: currentUser!.username,
         imageBase64: imageBase64,
         date: DateTime.now().toIso8601String(),
+        content: '',
       );
 
       latestPost = imagePost;
@@ -123,7 +124,7 @@ class NewPostController extends GetxController {
   void deletePostAtIndex(int index) async {
     if (activeUserNode == null) return;
 
-    final stack = activeUserNode!.user.postStack;
+    final stack = activeUserNode!.user.imagePostStack;
 
     // Convert to list, reverse, and remove post at index
     final posts = stack.toList();

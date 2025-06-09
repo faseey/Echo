@@ -22,7 +22,7 @@ class AppRouter{
   static final route = [
     GetPage(name: registerScreen, page: ()=>RegisterScreen()),
     GetPage(name: loginScreen, page: ()=>LoginScreen()),
-    GetPage(name: postScreen, page: ()=>PostScreen()),
+    //GetPage(name: postScreen, page: ()=>PostScreen()),
     GetPage(name: profileScreen, page: ()=>ProfileScreen()),
     GetPage(name: friendscreen, page: ()=>FriendScreen()),
     GetPage(name: newPostScreen, page: ()=>NewPostScreen()),

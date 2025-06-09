@@ -14,7 +14,7 @@ class User {
   String profileImageUrl;
   String bio;
   int user_index;  // <-- keep as is
-  PostStack postStack;
+  //PostStack postStack;
   RequestQueue requestQueue;
   ImagePostStack imagePostStack;
 
@@ -32,10 +32,10 @@ class User {
     this.profileImageUrl = '',
     this.bio = '',
     this.user_index = -1,  // <-- default value
-    PostStack? postStack,
+   // PostStack? postStack,
     RequestQueue? requestQueue,
     ImagePostStack? imagePostStack,
-  })  : postStack = postStack ?? PostStack(),
+  })  : //postStack = postStack ?? PostStack(),
         requestQueue = requestQueue ?? RequestQueue(),
         imagePostStack = imagePostStack ?? ImagePostStack();
 
@@ -54,14 +54,14 @@ class User {
     'profileImageUrl': profileImageUrl,
     'bio': bio,
     'user_index': user_index,      // <-- add here
-    'posts': postStack.toJsonList(),
+    'posts': imagePostStack.toJsonList(),
     'friendRequests': requestQueue.toJsonList(),
   };
 
   static User fromJson(Map<String, dynamic> json) {
-    final postStack = PostStack();
+    final imagePostStack = ImagePostStack();
     if (json['posts'] != null) {
-      postStack.loadFromJsonList(json['posts']);
+      imagePostStack.loadFromJsonList(json['posts']);
     }
 
     final requestQueue = RequestQueue();
@@ -81,7 +81,7 @@ class User {
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
       user_index: json['user_index'] ?? -1,  // <-- add here, default -1
-      postStack: postStack,
+      imagePostStack: imagePostStack,
       requestQueue: requestQueue,
     );
   }
