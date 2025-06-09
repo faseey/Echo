@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/friendlist.dart';
 import '../models/message.dart';
 import '../models/post_model.dart';
@@ -67,10 +69,7 @@ class User {
 
   // Save user data in memory
 
-  // Retrieve user data from memory
-  static User? getUserData(String username) {
-    return _userMemoryStore[username];
-  }
+
   static User fromJson(Map<String, dynamic> json) {
     final imagePostStack = ImagePostStack();
     if (json['posts'] != null) {
@@ -106,4 +105,5 @@ class User {
       message: messages,
     );
   }
+
 }
