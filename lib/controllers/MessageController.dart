@@ -3,6 +3,7 @@ import '../models/bst.dart';
 import '../models/echo.dart';
 import '../models/message.dart';
 import '../user_data_model/userService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageController extends GetxController {
 
@@ -24,6 +25,9 @@ class MessageController extends GetxController {
     );
     currentUser?.message.addMessage(receiver, sentMsg);
     print('[sendMessage] Sent message added to sender\'s chat list');
+    await saveUserToFirebase(Echo.activeUser!.user);
+    await loadUserFromFirebase(Echo.activeUser!.user.username);
+
 
     // Create and add message to receiver's chat list
     final receivedMsg = MessageNode(
@@ -37,6 +41,9 @@ class MessageController extends GetxController {
     if (receiverNode != null) {
       receiverNode.user.message.addMessage(sender, receivedMsg);
       print('[sendMessage] Received message added to receiver\'s chat list');
+      await saveUserToFirebase(receiverNode!.user);
+      await loadUserFromFirebase(receiverNode!.user.username);
+
     } else {
       print('[sendMessage] Receiver not found in BST');
 
@@ -106,5 +113,27 @@ class MessageController extends GetxController {
     // Reverse to show oldest messages first
     return messageList.reversed.toList();
   }
+
+
+
+  Future<void> saveUserToFirebase(User user) async {
+    final firestore = FirebaseFirestore.instance;
+    await firestore.collection('users').doc(user.username).set(user.toJson());
+    print('[saveUserToFirebase] Data saved for ${user.username}');
+  }
+  Future<User?> loadUserFromFirebase(String username) async {
+    final firestore = FirebaseFirestore.instance;
+    final doc = await firestore.collection('users').doc(username).get();
+
+    if (doc.exists) {
+      final data = doc.data()!;
+      print('[loadUserFromFirebase] Data loaded for $username');
+      return User.fromJson(data);
+    } else {
+      print('[loadUserFromFirebase] No data found for $username');
+      return null;
+    }
+  }
+
 
 }

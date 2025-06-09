@@ -152,6 +152,10 @@ class UserController extends GetxController {
       print("Login Successful");
       isLoggedIn = true;
       Echo.activeUser = node;
+      User? user = await loadUserFromFirebase(userName);
+      if (user != null) {
+        Echo.activeUser = node;  // or however you're assigning it
+      }
 
       update();
       print("Navigating to bottomnavbar...");
@@ -166,7 +170,27 @@ class UserController extends GetxController {
     }
   }
 
+  Future<User?> loadUserFromFirebase(String username) async {
+    try {
+      final firestore = FirebaseFirestore.instance;
 
+      // Get the document from 'users' collection by username
+      final doc = await firestore.collection('users').doc(username).get();
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        final user = User.fromJson(data);
+        print('[loadUserFromFirebase] Successfully loaded user: ${user.username}');
+        return user;
+      } else {
+        print('[loadUserFromFirebase] User not found: $username');
+        return null;
+      }
+    } catch (e) {
+      print('[loadUserFromFirebase] Error: $e');
+      return null;
+    }
+  }
   Future<void> logOut() async {
     try {
       Echo.activeUser = null;

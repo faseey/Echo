@@ -55,23 +55,22 @@ class NewPostController extends GetxController {
     try {
       final compressedBytes = await FlutterImageCompress.compressWithFile(
         imageFile.absolute.path,
-          quality:  50,
-      minWidth: 800,
-      minHeight: 800,
-      format: CompressFormat.jpeg,
+        quality: 50,
+        minWidth: 800,
+        minHeight: 800,
+        format: CompressFormat.jpeg,
       );
-      if(compressedBytes == null){
+
+      if (compressedBytes == null) {
         Get.snackbar("Error", "Image compression failed");
         return;
-
       }
 
       final imageBase64 = base64Encode(compressedBytes);
 
-      if(imageBase64.length > 1000000){
+      if (imageBase64.length > 1000000) {
         Get.snackbar("Error", "Image too large even after compression");
         return;
-
       }
 
       final imagePost = ImagePost(
@@ -83,26 +82,31 @@ class NewPostController extends GetxController {
 
       latestPost = imagePost;
 
-
-      // Save directly to Firestore 'posts' collection
-      await _firestore.collection('posts').add({
+      final postData = {
         'username': imagePost.username,
         'imageBase64': imagePost.imageBase64,
         'date': imagePost.date,
         'content': imagePost.content,
+      };
+
+      //  1. Save to global 'posts' collection
+     // await _firestore.collection('posts').add(postData);
+
+      // ✅ 2. Also save to the current user's document in 'users' collection
+      final userDocRef = _firestore.collection('users').doc(currentUser!.username);
+      await userDocRef.update({
+        'posts': FieldValue.arrayUnion([postData])
       });
 
+      await loadImagePostsFromFirestore();
 
-
-     await loadImagePostsFromFirestore();
-
-      log("✨post uplaod scccesfully");
+      log(" Post uploaded successfully");
       contentController.clear(); // Clear content field
 
       update();
       Get.snackbar("Success", "Post uploaded successfully");
     } catch (e) {
-      log(" Upload error: $e");
+      log("Upload error: $e");
       Get.snackbar("Error", "Failed to upload post");
     }
   }
