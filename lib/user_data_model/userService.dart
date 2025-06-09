@@ -1,4 +1,5 @@
 import '../models/friendlist.dart';
+import '../models/message.dart';
 import '../models/post_model.dart';
 import '../models/poststack.dart';
 
@@ -17,6 +18,7 @@ class User {
   PostStack postStack;
   RequestQueue requestQueue;
   ImagePostStack imagePostStack;
+  Messages message;
 
 
 
@@ -32,12 +34,14 @@ class User {
     this.profileImageUrl = '',
     this.bio = '',
     this.user_index = -1,  // <-- default value
-    PostStack? postStack,
+   PostStack? postStack,
     RequestQueue? requestQueue,
     ImagePostStack? imagePostStack,
+    Messages? message,
   })  : postStack = postStack ?? PostStack(),
         requestQueue = requestQueue ?? RequestQueue(),
-        imagePostStack = imagePostStack ?? ImagePostStack();
+        imagePostStack = imagePostStack ?? ImagePostStack(),
+        message = message ?? Messages();
 
 
 
@@ -56,8 +60,17 @@ class User {
     'user_index': user_index,      // <-- add here
     'posts': imagePostStack.toJsonList(),
     'friendRequests': requestQueue.toJsonList(),
-  };
+    'chatList': message.toJsonList(),
 
+  };
+  static final Map<String, User> _userMemoryStore = {};
+
+  // Save user data in memory
+
+  // Retrieve user data from memory
+  static User? getUserData(String username) {
+    return _userMemoryStore[username];
+  }
   static User fromJson(Map<String, dynamic> json) {
     final imagePostStack = ImagePostStack();
     if (json['posts'] != null) {
@@ -68,6 +81,13 @@ class User {
     if (json['friendRequests'] != null) {
       requestQueue.loadFromJsonList(json['friendRequests']);
     }
+    final messages = Messages();
+    if (json['chatList'] != null) {
+      messages.loadFromJsonList(json['chatList']);
+    }
+
+
+
 
     return User(
       username: json['username'] ?? '',
@@ -83,6 +103,7 @@ class User {
       user_index: json['user_index'] ?? -1,  // <-- add here, default -1
       imagePostStack: imagePostStack,
       requestQueue: requestQueue,
+      message: messages,
     );
   }
 }
