@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:echo_app/controllers/profileController.dart';
 import 'package:echo_app/models/poststack.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +19,10 @@ import '../user_data_model/userService.dart';
 class NewPostController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final ImagePicker _picker = ImagePicker();
-  final textController = TextEditingController();
+  final contentController = TextEditingController();
+
+  List<ImagePost> firestorePosts = [];
+
 
   ImagePost? latestPost;
 
@@ -49,76 +53,92 @@ class NewPostController extends GetxController {
     }
 
     try {
-      final imageBytes = await imageFile.readAsBytes();
-      final imageBase64 = base64Encode(imageBytes);
+      final compressedBytes = await FlutterImageCompress.compressWithFile(
+        imageFile.absolute.path,
+          quality:  50,
+      minWidth: 800,
+      minHeight: 800,
+      format: CompressFormat.jpeg,
+      );
+      if(compressedBytes == null){
+        Get.snackbar("Error", "Image compression failed");
+        return;
+
+      }
+
+      final imageBase64 = base64Encode(compressedBytes);
+
+      if(imageBase64.length > 1000000){
+        Get.snackbar("Error", "Image too large even after compression");
+        return;
+
+      }
 
       final imagePost = ImagePost(
         username: currentUser!.username,
         imageBase64: imageBase64,
         date: DateTime.now().toIso8601String(),
-        content: '',
+        content: contentController.text.trim(),
       );
 
       latestPost = imagePost;
 
 
-      activeUserNode!.user.imagePostStack.push(imagePost);
+      // Save directly to Firestore 'posts' collection
+      await _firestore.collection('posts').add({
+        'username': imagePost.username,
+        'imageBase64': imagePost.imageBase64,
+        'date': imagePost.date,
+        'content': imagePost.content,
+      });
 
-      await saveImagePostsToFirestore();
 
-      final profileController = Get.find<ProfileController>();
-      profileController.loadPostsFromFirestore(); // Refresh UI
+
+     await loadImagePostsFromFirestore();
+
+      log("✨post uplaod scccesfully");
+      contentController.clear(); // Clear content field
 
       update();
-
-      Get.snackbar("Success", "Image post uploaded");
+      Get.snackbar("Success", "Post uploaded successfully");
     } catch (e) {
-      log("❌ Upload error: $e");
-      Get.snackbar("Error", "Failed to upload image");
+      log(" Upload error: $e");
+      Get.snackbar("Error", "Failed to upload post");
     }
   }
 
   /// Save post stack to Firestore
-  Future<void> saveImagePostsToFirestore() async {
-    if (currentUser == null || activeUserNode == null) return;
 
-    try {
-      final imgJson = activeUserNode!.user.imagePostStack.toJsonList();
-      await _firestore
-          .collection('users')
-          .doc(currentUser!.username)
-          .set({'imagePosts': imgJson}, SetOptions(merge: true));
-
-      log("✅ Image posts saved to Firestore");
-    } catch (e) {
-      log("❌ Failed to save image posts: $e");
-      Get.snackbar("Error", "Could not save image posts");
-    }
-  }
 
   Future<void> loadImagePostsFromFirestore() async {
-    if (currentUser == null || activeUserNode == null) return;
+    if (currentUser == null) return;
 
     try {
-      final doc = await _firestore
-          .collection('users')
-          .doc(currentUser!.username)
+      // Fetch documents from 'posts' collection where username matches, ordered by date
+      final querySnapshot = await _firestore
+          .collection('posts')
+          .where('username', isEqualTo: currentUser!.username)
+          .orderBy('date', descending: true)
           .get();
 
-      final list = (doc.data()?['imagePosts'] as List<dynamic>?) ?? [];
+      // Map each document into your ImagePost model
+      firestorePosts = querySnapshot.docs.map((doc) {
+        return ImagePost(
+          username: doc['username'],
+          imageBase64: doc['imageBase64'],
+          date: doc['date'],
+          content: doc['content'],
+        );
+      }).toList();
 
-      activeUserNode!.user.imagePostStack
-        ..clear()
-        ..loadFromJsonList(list);  // Use your existing helper
-
-      update();
-
-      log("✅ Image posts loaded from Firestore");
+      log("✅ Posts loaded from Firestore");
+      update(); // notify GetX to rebuild UI
     } catch (e) {
-      log("❌ Failed to load image posts: $e");
-      Get.snackbar("Error", "Could not load image posts");
+      log("❌ Failed to load posts: $e");
+      Get.snackbar("Error", "Could not load posts");
     }
   }
+
 
 
   void deletePostAtIndex(int index) async {

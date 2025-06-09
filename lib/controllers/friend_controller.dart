@@ -73,6 +73,8 @@ class FriendController extends GetxController {
     Get.snackbar("Success", "Friend request sent to $friendUsername");
   }
   }
+
+
   Future<void> acceptRequestBySender(String senderUsername) async {
     if (currentUser == null) return;
 
@@ -204,6 +206,9 @@ class FriendController extends GetxController {
     requestTextController.dispose();
     super.onClose();
   }
+
+
+
   @override
   void onInit() {
     super.onInit();

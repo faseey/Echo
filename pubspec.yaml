@@ -41,6 +41,8 @@ dependencies:
   firebase_storage: ^11.6.5
   cloud_firestore: ^4.0.0
   persistent_bottom_nav_bar: ^6.2.1
+  flutter_image_compress: ^2.1.0
+
 
   image_picker: ^1.0.7
   curved_navigation_bar: ^1.0.6

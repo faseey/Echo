@@ -279,14 +279,14 @@ class ProfileController extends GetxController {
     update();
   }
 
-  List<ImagePost> getPostsList() {
+  List<Post> getPostsList() {
     if (activeUserNode == null) return [];
-    return activeUserNode!.user.imagePostStack.toList();
+    return activeUserNode!.user.postStack.toList();
   }
 
   void clearPosts() {
     if (activeUserNode == null) return;
-    activeUserNode!.user.imagePostStack.clear();
+    activeUserNode!.user.postStack.clear();
     update();
   }
 
@@ -312,8 +312,8 @@ class ProfileController extends GetxController {
           await _firestore.collection('users').doc(currentUser!.username).get();
       if (doc.exists) {
         final postsJsonList = doc.data()?['posts'] as List<dynamic>? ?? [];
-        activeUserNode!.user.imagePostStack.clear();
-        activeUserNode!.user.imagePostStack.loadFromJsonList(postsJsonList);
+        activeUserNode!.user.postStack.clear();
+        activeUserNode!.user.postStack.loadFromJsonList(postsJsonList);
         update();
       }
     } catch (e) {

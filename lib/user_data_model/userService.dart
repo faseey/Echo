@@ -14,7 +14,7 @@ class User {
   String profileImageUrl;
   String bio;
   int user_index;  // <-- keep as is
-  //PostStack postStack;
+  PostStack postStack;
   RequestQueue requestQueue;
   ImagePostStack imagePostStack;
 
@@ -32,10 +32,10 @@ class User {
     this.profileImageUrl = '',
     this.bio = '',
     this.user_index = -1,  // <-- default value
-   // PostStack? postStack,
+    PostStack? postStack,
     RequestQueue? requestQueue,
     ImagePostStack? imagePostStack,
-  })  : //postStack = postStack ?? PostStack(),
+  })  : postStack = postStack ?? PostStack(),
         requestQueue = requestQueue ?? RequestQueue(),
         imagePostStack = imagePostStack ?? ImagePostStack();
 
