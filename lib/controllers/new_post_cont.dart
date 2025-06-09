@@ -63,7 +63,7 @@ class NewPostController extends GetxController {
 
       activeUserNode!.user.imagePostStack.push(imagePost);
 
-      await savePostsToFirestore();
+      await saveImagePostsToFirestore();
 
       final profileController = Get.find<ProfileController>();
       profileController.loadPostsFromFirestore(); // Refresh UI
@@ -78,19 +78,44 @@ class NewPostController extends GetxController {
   }
 
   /// Save post stack to Firestore
-  Future<void> savePostsToFirestore() async {
+  Future<void> saveImagePostsToFirestore() async {
     if (currentUser == null || activeUserNode == null) return;
 
     try {
-      final postsJsonList = activeUserNode!.user.postStack.toJsonList();
+      final imgJson = activeUserNode!.user.imagePostStack.toJsonList();
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.username)
+          .set({'imagePosts': imgJson}, SetOptions(merge: true));
 
-      await _firestore.collection('users').doc(currentUser!.username).update({
-        'posts': postsJsonList,
-      });
-
-      log("✅ Posts saved to Firestore");
+      log("✅ Image posts saved to Firestore");
     } catch (e) {
-      log("❌ Error saving posts: $e");
+      log("❌ Failed to save image posts: $e");
+      Get.snackbar("Error", "Could not save image posts");
+    }
+  }
+
+  Future<void> loadImagePostsFromFirestore() async {
+    if (currentUser == null || activeUserNode == null) return;
+
+    try {
+      final doc = await _firestore
+          .collection('users')
+          .doc(currentUser!.username)
+          .get();
+
+      final list = (doc.data()?['imagePosts'] as List<dynamic>?) ?? [];
+
+      activeUserNode!.user.imagePostStack
+        ..clear()
+        ..loadFromJsonList(list);  // Use your existing helper
+
+      update();
+
+      log("✅ Image posts loaded from Firestore");
+    } catch (e) {
+      log("❌ Failed to load image posts: $e");
+      Get.snackbar("Error", "Could not load image posts");
     }
   }
 
@@ -123,6 +148,7 @@ class NewPostController extends GetxController {
 
   void clearLatestPost() {
     latestPost = null;
+    loadImagePostsFromFirestore();
     update();
   }
 }
