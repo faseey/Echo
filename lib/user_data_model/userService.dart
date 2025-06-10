@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/friendlist.dart';
 import '../models/message.dart';
+import '../models/newsfeedheap.dart';
 import '../models/post_model.dart';
 import '../models/poststack.dart';
 
@@ -21,6 +22,7 @@ class User {
   RequestQueue _requestQueue;
   ImagePostStack _imagePostStack;
   Messages _message;
+  NewsFeedHeap _newsfeedheap;
 
   User({
     required String username,
@@ -38,6 +40,7 @@ class User {
     RequestQueue? requestQueue,
     ImagePostStack? imagePostStack,
     Messages? message,
+    NewsFeedHeap? newsfeedheap,
   })  : _username = username,
         _email = email,
         _password = password,
@@ -52,7 +55,9 @@ class User {
         _postStack = postStack ?? PostStack(),
         _requestQueue = requestQueue ?? RequestQueue(),
         _imagePostStack = imagePostStack ?? ImagePostStack(),
-        _message = message ?? Messages();
+        _message = message ?? Messages(),
+        _newsfeedheap = newsfeedheap ?? NewsFeedHeap();
+
 
   //  Public getters
   String get username => _username;
@@ -70,6 +75,8 @@ class User {
   RequestQueue get requestQueue => _requestQueue;
   ImagePostStack get imagePostStack => _imagePostStack;
   Messages get message => _message;
+  NewsFeedHeap get newsfeedheap => _newsfeedheap;
+
 
   // Public setters
   set profileImageUrl(String url) => _profileImageUrl = url;
@@ -93,6 +100,8 @@ class User {
     'posts': _imagePostStack.toJsonList(),
     'friendRequests': _requestQueue.toJsonList(),
     'chatList': _message.toJsonList(),
+    'newsFeed': _newsfeedheap.toJsonList(),
+
   };
 
   static User fromJson(Map<String, dynamic> json) {
@@ -110,6 +119,12 @@ class User {
     if (json['chatList'] != null) {
       messages.loadFromJsonList(json['chatList']);
     }
+    final newsFeed = NewsFeedHeap();
+    if (json['newsFeed'] != null) {
+      newsFeed.loadFromJsonList(json['newsFeed']);
+    }
+
+
 
     return User(
       username: json['username'] ?? '',
@@ -126,6 +141,9 @@ class User {
       imagePostStack: imagePostStack,
       requestQueue: requestQueue,
       message: messages,
+      newsfeedheap: newsFeed,
+
     );
   }
+
 }

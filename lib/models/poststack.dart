@@ -66,4 +66,8 @@ class PostStack {
   PostNode? peek() => top;
 
   void clear() => top = null;
+
+  bool isNotEmpty(){
+    return top !=null;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echo_app/models/poststack.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'bst.dart';
@@ -30,7 +31,49 @@ class Echo extends GetxController {
     await loadConnectionsFromFirebase();
   }
 
+  void buildNewsFeed() {
+    if (activeUser == null) {
+      print("Error: No active user");
+      return;
+    }
 
+    activeUser!.user.newsfeedheap.clearNewsFeed();
+
+    int activeUserIndex = activeUser!.user.userIndex;
+    if (activeUserIndex == -1) {
+      print("Error: Active user not found in the system");
+      return;
+    }
+
+    List<int> directFriends = [];
+
+    for (int i = 0; i < userCount; i++) {
+      if (connections?[activeUserIndex][i] == 1) {
+        directFriends.add(i);
+      }
+    }
+    List<String> directFriendsUsernames = getUsernamesFromIndices(directFriends);
+    //  print("News Feed for ${activeUser!.username}:");
+
+    for (String username in directFriendsUsernames) {
+      BSTNode? friendUser = bst.search(username); // You'll need to implement this method if it's not already there
+      if (friendUser != null && friendUser.user.postStack.isNotEmpty()) {
+        PostNode? topPost = friendUser.user.postStack.peek(); // top of stack
+        activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,);
+      }
+    }
+
+  }
+
+  List<String> getUsernamesFromIndices(List<int> indices) {
+    List<String> usernames = [];
+    for (int index in indices) {
+      if (index >= 0 && index < usernames.length) {
+        usernames.add(usernames[index]);
+      }
+    }
+    return usernames;
+  }
 
   // Update local adjacency matrix size and sync to Firebase
   Future<List<List<int>>> getUpdatedConnections() async {
