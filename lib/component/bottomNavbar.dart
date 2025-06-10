@@ -1,3 +1,4 @@
+import 'package:echo_app/Screen/newsfeedscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../Screen/friendscreen.dart';
@@ -21,7 +22,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
 
     FriendScreen(),
-    Text("news feed"),
+    NewsFeedScreen(),
     //PostScreen(),
     MessageScreen(),
     ProfileScreen(),

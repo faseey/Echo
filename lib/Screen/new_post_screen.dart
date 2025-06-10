@@ -194,6 +194,7 @@ class NewPostScreen extends StatelessWidget {
                         foregroundColor: Colors.white,
                       ),
                     ),
+
                   ],
                 ),
               ),
