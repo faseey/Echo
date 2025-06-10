@@ -44,35 +44,42 @@ class Echo extends GetxController {
       print("Error: Active user not found in the system");
       return;
     }
-
+    print(activeUser?.user.username);
+    print(activeUser?.user.userIndex);
     List<int> directFriends = [];
 
     for (int i = 0; i < userCount; i++) {
       if (connections?[activeUserIndex][i] == 1) {
+        print(i);
         directFriends.add(i);
       }
     }
+    print("printing name $directFriends");
     List<String> directFriendsUsernames = getUsernamesFromIndices(directFriends);
     //  print("News Feed for ${activeUser!.username}:");
-
+    print("printing name $directFriendsUsernames");
     for (String username in directFriendsUsernames) {
-      BSTNode? friendUser = bst.search(username); // You'll need to implement this method if it's not already there
+
+      BSTNode? friendUser = bst.search(username);
+      print(friendUser?.user.username);// You'll need to implement this method if it's not already there
       if (friendUser != null && friendUser.user.postStack.isNotEmpty()) {
+        print(username);
         PostNode? topPost = friendUser.user.postStack.peek(); // top of stack
         activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,topPost!.post.imageBase64);
+
       }
     }
 
   }
 
   List<String> getUsernamesFromIndices(List<int> indices) {
-    List<String> usernames = [];
+    List<String> username = [];
     for (int index in indices) {
       if (index >= 0 && index < usernames.length) {
-        usernames.add(usernames[index]);
+        username.add(usernames[index]);
       }
     }
-    return usernames;
+    return username;
   }
 
   // Update local adjacency matrix size and sync to Firebase

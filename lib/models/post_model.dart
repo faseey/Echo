@@ -102,6 +102,8 @@ class PostStack {
   void clear() => top = null;
 
   bool isNotEmpty(){
+    print(top?.post.username);
     return top !=null;
   }
+  
 }

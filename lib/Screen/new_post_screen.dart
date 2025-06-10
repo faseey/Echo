@@ -97,6 +97,7 @@ class NewPostScreen extends StatelessWidget {
                   ),
                 ),
               ),
+<<<<<<< HEAD
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -109,6 +110,34 @@ class NewPostScreen extends StatelessWidget {
                     backgroundColor: Colors.blueGrey,
                     foregroundColor: Colors.white,
                   ),
+=======
+              // Buttons
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => controller.pickImage(ImageSource.camera),
+                      icon: Icon(Icons.camera_alt),
+                      label: Text("Camera"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pinkAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () => controller.pickImage(ImageSource.gallery),
+                      icon: Icon(Icons.photo),
+                      label: Text("Gallery"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+
+                  ],
+>>>>>>> f08f2e65a236d3bbbb574decaebe4d4dce740b08
                 ),
                 ElevatedButton.icon(
                   onPressed: () => controller.pickImage(ImageSource.gallery),
