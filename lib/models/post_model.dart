@@ -2,30 +2,35 @@
 
 class Post {
   final String username;
-  final String content;
   final String imageBase64;
   final String date;
+  String content;
 
   Post({
     required this.username,
-    required this.content,
     required this.imageBase64,
     required this.date,
+    required this.content,
   });
 
-  Map<String, dynamic> toJson() => {
-    'username': username,
-    'content': content,
-    'imageBase64': imageBase64,
-    'date': date,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'imageBase64': imageBase64,
+      'date': date,
+      'content': content,
+    };
+  }
 
-  factory Post.fromJson(Map<String, dynamic> json) => Post(
-    username: json['username'],
-    content: json['content'],
-    imageBase64: json['imageBase64'] ?? '',
-    date: json['date'],
-  );
+  static Post fromJson(Map<String, dynamic> json) {
+    return Post(
+      username: json['username'] ?? '',
+      imageBase64: json['imageBase64'] ?? '',
+      date: json['date'] ?? '',
+      content: json['content'] ?? '',
+    );
+  }
+
 }
 
 // Import your ImagePost model
@@ -54,6 +59,27 @@ class PostStack {
     return posts;
   }
 
+  void remove(Post post) {
+    PostNode? current = top;
+    PostNode? previous;
+
+    while (current != null) {
+      if (current.post.username == post.username) {
+        if (previous == null) {
+          // Removing top node
+          top = current.next;
+        } else {
+          // Bypass the current node
+          previous.next = current.next;
+        }
+        break;
+      }
+      previous = current;
+      current = current.next;
+    }
+  }
+
+
   void loadFromJsonList(List<dynamic> jsonList) {
     for (var postData in jsonList.reversed) {
       final post = Post.fromJson(postData);
@@ -75,9 +101,7 @@ class PostStack {
 
   void clear() => top = null;
 
-
   bool isNotEmpty(){
     return top !=null;
   }
 }
-

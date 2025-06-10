@@ -191,7 +191,6 @@ class ProfileController extends GetxController {
   String imagePath = '';
   String imageBase64 = '';
   String bio = '';
-
   final Echo echo = Get.find<Echo>();
   // Reference to the active logged-in UserNode from Echo
   BSTNode? get activeUserNode => echo.activeUser;
@@ -233,29 +232,28 @@ class ProfileController extends GetxController {
     }
 
     try {
-      // Update image in Firestore (store base64 string)
+      bio = newBio;
+      currentUser!.bio = newBio;
+
       if (imageBase64.isNotEmpty) {
-        currentUser!.profileImageUrl = imageBase64;
+        final prefixedBase64 = 'data:image/jpeg;base64,$imageBase64';
+        currentUser!.profileImageUrl = prefixedBase64;
       }
 
-      // Update bio
-      currentUser!.bio = newBio;
-      bio = newBio;
-
-      // Prepare update data
-      Map<String, dynamic> updateData = {
-        'bio': newBio,
-        'profileImageUrl': currentUser!.profileImageUrl ?? '', // base64 string
+      // Prepare data to update in Firestore
+      final updateData = {
+        'bio': currentUser!.bio,
+        'profileImageUrl': currentUser!.profileImageUrl ?? '',
       };
 
-      // Update Firestore
+      // Update Firestore using username as document ID
       await _firestore
           .collection('users')
           .doc(currentUser!.username)
           .update(updateData);
 
       log("Updated profile: $updateData");
-      update(); // Refresh UI
+      update(); // Refresh GetBuilder UI
     } catch (e) {
       log("Error saving data: $e");
       Get.snackbar("Error", "Failed to save profile data");
@@ -310,7 +308,7 @@ class ProfileController extends GetxController {
 
     try {
       final doc =
-          await _firestore.collection('users').doc(currentUser!.username).get();
+      await _firestore.collection('users').doc(currentUser!.username).get();
       if (doc.exists) {
         final postsJsonList = doc.data()?['posts'] as List<dynamic>? ?? [];
         activeUserNode!.user.postStack.clear();
@@ -330,5 +328,29 @@ class ProfileController extends GetxController {
         .where((p) => p.username == currentUser!.username)
         .toList();
   }
+
+
+
+  Future<void> deletePost(Post post) async {
+    if (currentUser == null || activeUserNode == null) return;
+
+    activeUserNode!.user.postStack.remove(post); // remove from stack
+
+    await savePostsToFirestore(); // update Firestore
+    update();
+    Get.snackbar("Deleted", "Post deleted successfully");
+  }
+
+
+
+  Future<void> editPost(Post post, String newContent) async {
+    if (currentUser == null || activeUserNode == null) return;
+
+    post.content = newContent;
+    await savePostsToFirestore();
+    update();
+    Get.snackbar("Updated", "Post updated successfully");
+  }
+
 
 }

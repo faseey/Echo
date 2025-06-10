@@ -20,10 +20,9 @@ class NewPostController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final ImagePicker _picker = ImagePicker();
   final contentController = TextEditingController();
-
+  final Echo echo = Get.find<Echo>();
   List<Post> firestorePosts = [];
 
-  final Echo echo = Get.find<Echo>();
 
   Post? latestPost;
 
@@ -83,21 +82,30 @@ class NewPostController extends GetxController {
 
       latestPost = imagePost;
 
-      final postData = {
-        'username': imagePost.username,
-        'imageBase64': imagePost.imageBase64,
-        'date': imagePost.date,
-        'content': imagePost.content,
-      };
+      // final postData = {
+      //   'username': imagePost.username,
+      //   'imageBase64': imagePost.imageBase64,
+      //   'date': imagePost.date,
+      //   'content': imagePost.content,
+      // };
 
       //  1. Save to global 'posts' collection
-     // await _firestore.collection('posts').add(postData);
+      // await _firestore.collection('posts').add(postData);
 
-      // ✅ 2. Also save to the current user's document in 'users' collection
-      final userDocRef = _firestore.collection('users').doc(currentUser!.username);
-      await userDocRef.update({
-        'posts': FieldValue.arrayUnion([postData])
-      });
+      // Add to user stack
+      currentUser!.postStack.push(imagePost);
+
+      await _firestore.collection('users')
+          .doc(currentUser!.username)
+          .set({
+        'posts': currentUser!.postStack.toJsonList(),
+      }, SetOptions(merge: true));
+
+
+      final jsonList = currentUser!.postStack.toJsonList();
+      log("🟡 Uploading post data: $jsonList");
+
+
 
       await loadImagePostsFromFirestore();
 
@@ -119,30 +127,31 @@ class NewPostController extends GetxController {
     if (currentUser == null) return;
 
     try {
-      // Fetch documents from 'posts' collection where username matches, ordered by date
-      final querySnapshot = await _firestore
-          .collection('posts')
-          .where('username', isEqualTo: currentUser!.username)
-          .orderBy('date', descending: true)
-          .get();
+      firestorePosts.clear(); // Clear any old posts
 
-      // Map each document into your ImagePost model
-      firestorePosts = querySnapshot.docs.map((doc) {
-        return Post(
-          username: doc['username'],
-          imageBase64: doc['imageBase64'],
-          date: doc['date'],
-          content: doc['content'],
-        );
-      }).toList();
+      // Use username instead of email
+      final userDoc = await _firestore.collection('users').doc(currentUser!.username).get();
 
-      log("✅ Posts loaded from Firestore");
-      update(); // notify GetX to rebuild UI
+      if (userDoc.exists && userDoc.data() != null) {
+        final data = userDoc.data()!;
+        final List<dynamic> postsJson = data['posts'] ?? [];
+
+        firestorePosts = postsJson.map((postData) {
+          return Post.fromJson(postData);
+        }).toList();
+      }
+
+      log("✅ User posts loaded from their own document");
+      update(); // Notify UI
     } catch (e) {
-      log("❌ Failed to load posts: $e");
-      Get.snackbar("Error", "Could not load posts");
+      log("❌ Failed to load user posts: $e");
+      Get.snackbar("Error", "Failed to load your posts");
     }
   }
+
+
+
+
 
 
 
@@ -175,6 +184,7 @@ class NewPostController extends GetxController {
   void clearLatestPost() {
     latestPost = null;
     loadImagePostsFromFirestore();
+    //loadImagePostsFromFirestore();
     update();
   }
 }
