@@ -162,6 +162,9 @@ class UserController extends GetxController {
       if (user != null) {
         Echo.activeUser = node;  // or however you're assigning it
       }
+      BSTNode? root = echo.bst.root;
+
+      printLevelOrder(root);
 
 
 
