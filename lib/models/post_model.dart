@@ -1,12 +1,12 @@
 
 
-class ImagePost {
+class Post {
   final String username;
   final String content;
   final String imageBase64;
   final String date;
 
-  ImagePost({
+  Post({
     required this.username,
     required this.content,
     required this.imageBase64,
@@ -20,7 +20,7 @@ class ImagePost {
     'date': date,
   };
 
-  factory ImagePost.fromJson(Map<String, dynamic> json) => ImagePost(
+  factory Post.fromJson(Map<String, dynamic> json) => Post(
     username: json['username'],
     content: json['content'],
     imageBase64: json['imageBase64'] ?? '',
@@ -30,23 +30,23 @@ class ImagePost {
 
 // Import your ImagePost model
 
-class ImagePostNode {
-  final ImagePost post;
-  ImagePostNode? next;
+class PostNode {
+  final Post post;
+  PostNode? next;
 
-  ImagePostNode({required this.post, this.next});
+  PostNode({required this.post, this.next});
 }
 
-class ImagePostStack {
-  ImagePostNode? top;
+class PostStack {
+  PostNode? top;
 
-  void push(ImagePost post) {
-    top = ImagePostNode(post: post, next: top);
+  void push(Post post) {
+    top = PostNode(post: post, next: top);
   }
 
   List<Map<String, dynamic>> toJsonList() {
     final posts = <Map<String, dynamic>>[];
-    ImagePostNode? current = top;
+    PostNode? current = top;
     while (current != null) {
       posts.add(current.post.toJson());
       current = current.next;
@@ -56,14 +56,14 @@ class ImagePostStack {
 
   void loadFromJsonList(List<dynamic> jsonList) {
     for (var postData in jsonList.reversed) {
-      final post = ImagePost.fromJson(postData);
+      final post = Post.fromJson(postData);
       push(post);
     }
   }
 
-  List<ImagePost> toList() {
-    final result = <ImagePost>[];
-    ImagePostNode? current = top;
+  List<Post> toList() {
+    final result = <Post>[];
+    PostNode? current = top;
     while (current != null) {
       result.add(current.post);
       current = current.next;
@@ -71,8 +71,13 @@ class ImagePostStack {
     return result;
   }
 
-  ImagePostNode? peek() => top;
+  PostNode? peek() => top;
 
   void clear() => top = null;
+
+
+  bool isNotEmpty(){
+    return top !=null;
+  }
 }
 

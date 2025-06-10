@@ -21,11 +21,11 @@ class NewPostController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   final contentController = TextEditingController();
 
-  List<ImagePost> firestorePosts = [];
+  List<Post> firestorePosts = [];
 
   final Echo echo = Get.find<Echo>();
 
-  ImagePost? latestPost;
+  Post? latestPost;
 
   BSTNode? get activeUserNode => echo.activeUser;
   User? get currentUser => activeUserNode?.user;
@@ -74,7 +74,7 @@ class NewPostController extends GetxController {
         return;
       }
 
-      final imagePost = ImagePost(
+      final imagePost = Post(
         username: currentUser!.username,
         imageBase64: imageBase64,
         date: DateTime.now().toIso8601String(),
@@ -128,7 +128,7 @@ class NewPostController extends GetxController {
 
       // Map each document into your ImagePost model
       firestorePosts = querySnapshot.docs.map((doc) {
-        return ImagePost(
+        return Post(
           username: doc['username'],
           imageBase64: doc['imageBase64'],
           date: doc['date'],
@@ -149,7 +149,7 @@ class NewPostController extends GetxController {
   void deletePostAtIndex(int index) async {
     if (activeUserNode == null) return;
 
-    final stack = activeUserNode!.user.imagePostStack;
+    final stack = activeUserNode!.user.postStack;
 
     // Convert to list, reverse, and remove post at index
     final posts = stack.toList();

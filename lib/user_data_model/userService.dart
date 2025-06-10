@@ -20,7 +20,7 @@ class User {
   int _userIndex;
   PostStack _postStack;
   RequestQueue _requestQueue;
-  ImagePostStack _imagePostStack;
+ // ImagePostStack _imagePostStack;
   Messages _message;
   NewsFeedHeap _newsfeedheap;
 
@@ -38,7 +38,7 @@ class User {
     int user_index = -1,
     PostStack? postStack,
     RequestQueue? requestQueue,
-    ImagePostStack? imagePostStack,
+  //  ImagePostStack? imagePostStack,
     Messages? message,
     NewsFeedHeap? newsfeedheap,
   })  : _username = username,
@@ -54,7 +54,7 @@ class User {
         _userIndex = user_index,
         _postStack = postStack ?? PostStack(),
         _requestQueue = requestQueue ?? RequestQueue(),
-        _imagePostStack = imagePostStack ?? ImagePostStack(),
+       // _imagePostStack = imagePostStack ?? ImagePostStack(),
         _message = message ?? Messages(),
         _newsfeedheap = newsfeedheap ?? NewsFeedHeap();
 
@@ -73,7 +73,7 @@ class User {
   int get userIndex => _userIndex;
   PostStack get postStack => _postStack;
   RequestQueue get requestQueue => _requestQueue;
-  ImagePostStack get imagePostStack => _imagePostStack;
+ // ImagePostStack get imagePostStack => _imagePostStack;
   Messages get message => _message;
   NewsFeedHeap get newsfeedheap => _newsfeedheap;
 
@@ -97,7 +97,7 @@ class User {
     'profileImageUrl': _profileImageUrl,
     'bio': _bio,
     'user_index': _userIndex,
-    'posts': _imagePostStack.toJsonList(),
+    //'posts': _imagePostStack.toJsonList(),
     'friendRequests': _requestQueue.toJsonList(),
     'chatList': _message.toJsonList(),
     'newsFeed': _newsfeedheap.toJsonList(),
@@ -105,7 +105,7 @@ class User {
   };
 
   static User fromJson(Map<String, dynamic> json) {
-    final imagePostStack = ImagePostStack();
+    final imagePostStack = PostStack();
     if (json['posts'] != null) {
       imagePostStack.loadFromJsonList(json['posts']);
     }
@@ -138,7 +138,7 @@ class User {
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
       user_index: json['user_index'] ?? -1,
-      imagePostStack: imagePostStack,
+     // imagePostStack: imagePostStack,
       requestQueue: requestQueue,
       message: messages,
       newsfeedheap: newsFeed,

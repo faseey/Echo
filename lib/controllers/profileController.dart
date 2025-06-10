@@ -270,13 +270,13 @@ class ProfileController extends GetxController {
       return;
     }
 
-    final newPost = ImagePost(
+    final newPost = Post(
       username: currentUser!.username,
       content: content,
       date: date, imageBase64: '',
     );
 
-    activeUserNode!.user.imagePostStack.push(newPost);
+    activeUserNode!.user.postStack.push(newPost);
     update();
   }
 
@@ -295,7 +295,7 @@ class ProfileController extends GetxController {
     if (currentUser == null || activeUserNode == null) return;
 
     try {
-      final postsJsonList = activeUserNode!.user.imagePostStack.toJsonList();
+      final postsJsonList = activeUserNode!.user.postStack.toJsonList();
       await _firestore.collection('users').doc(currentUser!.username).update({
         'posts': postsJsonList,
       });
@@ -322,10 +322,10 @@ class ProfileController extends GetxController {
     }
   }
 
-  List<ImagePost> getUserImagePosts() {
+  List<Post> getUserImagePosts() {
     if (activeUserNode == null || currentUser == null) return [];
 
-    return activeUserNode!.user.imagePostStack
+    return activeUserNode!.user.postStack
         .toList()
         .where((p) => p.username == currentUser!.username)
         .toList();

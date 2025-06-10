@@ -2,16 +2,35 @@ class NewsFeedNode {
   String post;
   String date; // Format: "YYYY-MM-DD HH:MM:SS"
   String username;
+  String imageBase64;
 
-  NewsFeedNode(this.post, this.date, this.username);
+  NewsFeedNode(this.post, this.date, this.username, this.imageBase64);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'post': post,
+      'date': date,
+      'username': username,
+      'imageBase64': imageBase64,
+    };
+  }
+
+  factory NewsFeedNode.fromJson(Map<String, dynamic> json) {
+    return NewsFeedNode(
+      json['post'] ?? '',
+      json['date'] ?? '',
+      json['username'] ?? '',
+      json['imageBase64'] ?? '',
+    );
+  }
 }
+
 
 class NewsFeedHeap {
   List<NewsFeedNode> _heap = [];
 
-  // Compare timestamps (newer date is greater)
   bool _isGreater(String a, String b) {
-    return a.compareTo(b) > 0; // Lexicographical comparison works for ISO format
+    return a.compareTo(b) > 0;
   }
 
   void _heapifyUp(int index) {
@@ -53,24 +72,12 @@ class NewsFeedHeap {
     _heap[j] = temp;
   }
 
-  void addPost(String post, String date, String username) {
-    final node = NewsFeedNode(post, date, username);
+  void addPost(String post, String date, String username, String imageBase64) {
+    final node = NewsFeedNode(post, date, username, imageBase64);
     _heap.add(node);
     _heapifyUp(_heap.length - 1);
   }
 
-  void displayAllPosts() {
-    // Clone the heap so we don't destroy the original
-    final tempHeap = List<NewsFeedNode>.from(_heap);
-    while (tempHeap.isNotEmpty) {
-      final top = tempHeap.first;
-      print('${top.username} posted: "${top.post}" on ${top.date}');
-      tempHeap[0] = tempHeap.removeLast();
-      _restoreHeap(tempHeap);
-    }
-  }
-
-  //cloned the tempHeap that why using this instead of heapifyDonw//
   void _restoreHeap(List<NewsFeedNode> heapList) {
     int index = 0;
     int size = heapList.length;
@@ -97,26 +104,21 @@ class NewsFeedHeap {
       }
     }
   }
+
   void clearNewsFeed() {
     _heap.clear();
   }
+
   List<Map<String, dynamic>> toJsonList() {
-    return _heap.map((node) => {
-      'post': node.post,
-      'date': node.date,
-      'username': node.username,
-    }).toList();
+    return _heap.map((node) => node.toJson()).toList();
   }
 
   void loadFromJsonList(List<dynamic> jsonList) {
     _heap.clear();
     for (var item in jsonList) {
-      _heap.add(NewsFeedNode(
-        item['post'] ?? '',
-        item['date'] ?? '',
-        item['username'] ?? '',
-      ));
+      _heap.add(NewsFeedNode.fromJson(item));
     }
   }
 
+  List<NewsFeedNode> get heap => _heap;
 }

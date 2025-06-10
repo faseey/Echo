@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echo_app/models/poststack.dart';
+import 'package:echo_app/models/post_model.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'bst.dart';
@@ -59,7 +59,7 @@ class Echo extends GetxController {
       BSTNode? friendUser = bst.search(username); // You'll need to implement this method if it's not already there
       if (friendUser != null && friendUser.user.postStack.isNotEmpty()) {
         PostNode? topPost = friendUser.user.postStack.peek(); // top of stack
-        activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,);
+        activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,topPost!.post.imageBase64);
       }
     }
 
