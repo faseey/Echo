@@ -23,10 +23,11 @@ class NewPostController extends GetxController {
 
   List<ImagePost> firestorePosts = [];
 
+  final Echo echo = Get.find<Echo>();
 
   ImagePost? latestPost;
 
-  BSTNode? get activeUserNode => Echo.activeUser;
+  BSTNode? get activeUserNode => echo.activeUser;
   User? get currentUser => activeUserNode?.user;
 
   /// Pick image from camera or gallery

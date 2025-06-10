@@ -11,11 +11,11 @@ class Echo extends GetxController {
   Echo._internal(); // private constructor
   factory Echo() => instance;
 
-  static int userCount = 0;
+   int userCount = 0;
   BST bst = BST();
-  static List<List<int>>? connections;
-  static BSTNode? activeUser;
-  static List<String> usernames = [];
+  List<List<int>>? connections;
+  BSTNode? activeUser;
+  List<String> usernames = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String connectionsDocId = "connections_matrix";
@@ -103,7 +103,7 @@ class Echo extends GetxController {
   Future<void> saveUsernamesToFirebase() async {
     try {
       await _firestore.collection('app_data').doc('usernames').set({
-        'usernames': Echo.usernames,
+        'usernames': usernames,
       });
 
       print('Usernames saved to Firestore successfully.');
@@ -121,7 +121,7 @@ class Echo extends GetxController {
         snapshot.data() as Map<String, dynamic>?;
 
         if (data != null && data['usernames'] is List) {
-          Echo.usernames = List<String>.from(data['usernames']);
+          usernames = List<String>.from(data['usernames']);
           print('Usernames loaded successfully.');
         }
       }

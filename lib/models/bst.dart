@@ -40,7 +40,7 @@ class BST {
     node.height = 1 + _maxHeight(node.left, node.right);
     int balance = _getBalance(node);
 
-    // 🔁 Rotations if unbalanced
+    //  Rotations if unbalanced
     if (balance > 1 && user.username.compareTo(node.left!.user.username) < 0) {
       return _rightRotate(node); // LL
     }

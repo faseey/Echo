@@ -17,7 +17,7 @@ class FriendController extends GetxController {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  BSTNode? get activeUserNode => Echo.activeUser;
+  BSTNode? get activeUserNode => echo.activeUser;
   User? get currentUser => activeUserNode?.user;
 
   // Observable list of friend requests for UI
@@ -41,30 +41,30 @@ class FriendController extends GetxController {
     Get.snackbar("Error","YOU CANNOT send request to yourself");
     return;
   }
-    int senderIndex =  currentUser!.user_index;
-    int receiverIndex =  receiverNode.user.user_index;
+    int senderIndex =  currentUser!.userIndex;
+    int receiverIndex =  receiverNode.user.userIndex;
 
-    if(Echo.connections?[senderIndex][receiverIndex] ==1 && Echo.connections?[receiverIndex][senderIndex] ==1 ){
+    if(echo.connections?[senderIndex][receiverIndex] ==1 && echo.connections?[receiverIndex][senderIndex] ==1 ){
       Get.snackbar("Error","You are already friends with $friendUsername");
       return;
     }
-    else if(Echo.connections?[senderIndex][receiverIndex] ==1){
+    else if(echo.connections?[senderIndex][receiverIndex] ==1){
       Get.snackbar("Error","You have already sent Friend Request  to  $friendUsername");
       return;
     }
-    if( Echo.connections![receiverIndex][senderIndex] ==1){
+    if( echo.connections![receiverIndex][senderIndex] ==1){
       Get.snackbar("Error","$friendUsername has already sent you a friend request");
       return;
     }
     else{
-      Echo.connections![senderIndex][receiverIndex] = 1;
+      echo.connections![senderIndex][receiverIndex] = 1;
       await echo.saveConnectionsToFirebase();
 
 
     final request = Request(
       friendUsername: currentUser!.username,
-      senderIndex: currentUser!.user_index,
-      receiverIndex: receiverNode.user.user_index,
+      senderIndex: currentUser!.userIndex,
+      receiverIndex: receiverNode.user.userIndex,
     );
 
     receiverNode.user.requestQueue.addRequest(request);
@@ -83,8 +83,8 @@ class FriendController extends GetxController {
     final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
     if (requestNode != null) {
       // Step 1: Accept connection in Echo matrix
-      Echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
-      Echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
+      echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
+      echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
       await echo.saveConnectionsToFirebase();
 
       // Step 2: Add each other to friendList in Firestore
@@ -103,7 +103,7 @@ class FriendController extends GetxController {
     final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
     if (requestNode != null) {
 
-      Echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 0;
+      echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 0;
       await echo.saveConnectionsToFirebase();
       currentUser!.requestQueue.deleteRequestBySender(senderUsername);
       await saveRequestsToFirestore(currentUser!.username);
@@ -161,8 +161,8 @@ class FriendController extends GetxController {
   }
   Future<List<String>> getFriendSuggestions() async {
     // Step 1: Get the adjacency matrix from Echo
-    List<List<int>> adj = Echo.connections ?? [];
-    int? userIndex = currentUser?.user_index;
+    List<List<int>> adj = echo.connections ?? [];
+    int? userIndex = currentUser?.userIndex;
 
 
 
@@ -176,11 +176,11 @@ class FriendController extends GetxController {
     print(level2Indexes);
     await echo.loadUsernamesFromFirebase();
     print("userlist");
-    print(Echo.usernames);
+    print(echo.usernames);
     // Step 4: Map to usernames
     List<String> suggestions = level2Indexes
-        .where((i) => i >= 0 && i < Echo.usernames.length)
-        .map((i) => Echo.usernames[i])
+        .where((i) => i >= 0 && i < echo.usernames.length)
+        .map((i) => echo.usernames[i])
         .toList();
     print("[suggestions]");
     print(suggestions);

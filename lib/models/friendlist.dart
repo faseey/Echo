@@ -82,7 +82,7 @@ class RequestQueue extends GetxController{
   Future<void> addRequest(Request request) async {
 
     final Echo echo = Get.find<Echo>();
-    if (request.senderIndex < 0 || request.receiverIndex < 0 || Echo.connections == null) {
+    if (request.senderIndex < 0 || request.receiverIndex < 0 || echo.connections == null) {
       return;
     }
 
@@ -134,8 +134,8 @@ class RequestQueue extends GetxController{
       if (current.request.status == RequestStatus.pending) {
         if (acceptAll) {
           current.request.status = RequestStatus.accepted;
-          Echo.connections![current.request.senderIndex][current.request.receiverIndex] = 1;
-          Echo.connections![current.request.receiverIndex][current.request.senderIndex] = 1;
+          echo.connections![current.request.senderIndex][current.request.receiverIndex] = 1;
+          echo.connections![current.request.receiverIndex][current.request.senderIndex] = 1;
 
           acceptedRequests.add(
             AcceptedRequest(senderIndex: current.request.senderIndex, isAccepted: true),

@@ -6,69 +6,94 @@ import '../models/post_model.dart';
 import '../models/poststack.dart';
 
 class User {
-  String username;
-  String email;
-  String password;
-  String firstname;
-  String lastname;
-  String DOB;
-  String lastSignin;
-  String gender;
-  String profileImageUrl;
-  String bio;
-  int user_index;  // <-- keep as is
-  PostStack postStack;
-  RequestQueue requestQueue;
-  ImagePostStack imagePostStack;
-  Messages message;
-
-
+  String _username;
+  String _email;
+  String _password;
+  String _firstname;
+  String _lastname;
+  String _DOB;
+  String _lastSignin;
+  String _gender;
+  String _profileImageUrl;
+  String _bio;
+  int _userIndex;
+  PostStack _postStack;
+  RequestQueue _requestQueue;
+  ImagePostStack _imagePostStack;
+  Messages _message;
 
   User({
-    required this.username,
-    required this.email,
-    required this.password,
-    required this.firstname,
-    required this.lastname,
-    required this.DOB,
-    required this.lastSignin,
-    required this.gender,
-    this.profileImageUrl = '',
-    this.bio = '',
-    this.user_index = -1,  // <-- default value
-   PostStack? postStack,
+    required String username,
+    required String email,
+    required String password,
+    required String firstname,
+    required String lastname,
+    required String DOB,
+    required String lastSignin,
+    required String gender,
+    String profileImageUrl = '',
+    String bio = '',
+    int user_index = -1,
+    PostStack? postStack,
     RequestQueue? requestQueue,
     ImagePostStack? imagePostStack,
     Messages? message,
-  })  : postStack = postStack ?? PostStack(),
-        requestQueue = requestQueue ?? RequestQueue(),
-        imagePostStack = imagePostStack ?? ImagePostStack(),
-        message = message ?? Messages();
+  })  : _username = username,
+        _email = email,
+        _password = password,
+        _firstname = firstname,
+        _lastname = lastname,
+        _DOB = DOB,
+        _lastSignin = lastSignin,
+        _gender = gender,
+        _profileImageUrl = profileImageUrl,
+        _bio = bio,
+        _userIndex = user_index,
+        _postStack = postStack ?? PostStack(),
+        _requestQueue = requestQueue ?? RequestQueue(),
+        _imagePostStack = imagePostStack ?? ImagePostStack(),
+        _message = message ?? Messages();
 
+  //  Public getters
+  String get username => _username;
+  String get email => _email;
+  String get password => _password;
+  String get firstname => _firstname;
+  String get lastname => _lastname;
+  String get DOB => _DOB;
+  String get lastSignin => _lastSignin;
+  String get gender => _gender;
+  String get profileImageUrl => _profileImageUrl;
+  String get bio => _bio;
+  int get userIndex => _userIndex;
+  PostStack get postStack => _postStack;
+  RequestQueue get requestQueue => _requestQueue;
+  ImagePostStack get imagePostStack => _imagePostStack;
+  Messages get message => _message;
 
+  // Public setters
+  set profileImageUrl(String url) => _profileImageUrl = url;
+  set bio(String b) => _bio = b;
+  set lastSignin(String value) => _lastSignin = value;
+  set user_index(int value) => user_index = value;
 
 
   Map<String, dynamic> toJson() => {
-    'username': username,
-    'email': email,
-    'password': password,
-    'firstname': firstname,
-    'lastname': lastname,
-    'DOB': DOB,
-    'lastSignin': lastSignin,
-    'gender': gender,
-    'profileImageUrl': profileImageUrl,
-    'bio': bio,
-    'user_index': user_index,      // <-- add here
-    'posts': imagePostStack.toJsonList(),
-    'friendRequests': requestQueue.toJsonList(),
-    'chatList': message.toJsonList(),
-
+    'username': _username,
+    'email': _email,
+    'password': _password,
+    'firstname': _firstname,
+    'lastname': _lastname,
+    'DOB': _DOB,
+    'lastSignin': _lastSignin,
+    'gender': _gender,
+    'profileImageUrl': _profileImageUrl,
+    'bio': _bio,
+    'user_index': _userIndex,
+    'posts': _imagePostStack.toJsonList(),
+    'friendRequests': _requestQueue.toJsonList(),
+    'chatList': _message.toJsonList(),
   };
-  static final Map<String, User> _userMemoryStore = {};
-
-  // Save user data in memory
-
 
   static User fromJson(Map<String, dynamic> json) {
     final imagePostStack = ImagePostStack();
@@ -80,13 +105,11 @@ class User {
     if (json['friendRequests'] != null) {
       requestQueue.loadFromJsonList(json['friendRequests']);
     }
+
     final messages = Messages();
     if (json['chatList'] != null) {
       messages.loadFromJsonList(json['chatList']);
     }
-
-
-
 
     return User(
       username: json['username'] ?? '',
@@ -99,11 +122,10 @@ class User {
       gender: json['gender'] ?? '',
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
-      user_index: json['user_index'] ?? -1,  // <-- add here, default -1
+      user_index: json['user_index'] ?? -1,
       imagePostStack: imagePostStack,
       requestQueue: requestQueue,
       message: messages,
     );
   }
-
 }

@@ -7,7 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageController extends GetxController {
 
-  BSTNode? get activeUserNode => Echo.activeUser;
+  final Echo echo = Get.find<Echo>();
+  BSTNode? get activeUserNode => echo.activeUser;
   User? get currentUser => activeUserNode?.user;
 
   // Send message: Adds to sender's and receiver's chat lists
@@ -25,8 +26,8 @@ class MessageController extends GetxController {
     );
     currentUser?.message.addMessage(receiver, sentMsg);
     print('[sendMessage] Sent message added to sender\'s chat list');
-    await saveUserToFirebase(Echo.activeUser!.user);
-    await loadUserFromFirebase(Echo.activeUser!.user.username);
+    await saveUserToFirebase(activeUserNode!.user);
+    await loadUserFromFirebase(activeUserNode!.user.username);
 
 
     // Create and add message to receiver's chat list

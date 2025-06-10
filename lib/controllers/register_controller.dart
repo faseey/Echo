@@ -32,13 +32,13 @@ class UserController extends GetxController {
       await echo.bst.insert(user);
 
       // Optionally set activeUser here if you want
-      Echo.activeUser = echo.bst.search(user.username) ;
-      Echo.activeUser?.user.user_index =  Echo.userCount ;
+      echo.activeUser = echo.bst.search(user.username) ;
+      echo.activeUser?.user.user_index =  echo.userCount ;
       await userCollection.doc(user.username).update({
-        'user_index': Echo.userCount,
+        'user_index': echo.userCount,
       });
-      Echo.userCount++;
-      Echo.usernames.add(user.username);
+      echo.userCount++;
+      echo.usernames.add(user.username);
       await echo.saveUsernamesToFirebase();
 
 
@@ -46,7 +46,7 @@ class UserController extends GetxController {
 
       // Assign only if non-empty (optional check)
       if (newConnections.isNotEmpty) {
-        Echo.connections = newConnections;
+        echo.connections = newConnections;
         await echo.saveConnectionsToFirebase();
       }
 
@@ -156,11 +156,11 @@ class UserController extends GetxController {
 
       print("Login Successful");
       isLoggedIn = true;
-      Echo.activeUser = node;
+      echo.activeUser = node;
       User? user = await loadUserFromFirebase(userName);
       await echo.loadUsernamesFromFirebase();
       if (user != null) {
-        Echo.activeUser = node;  // or however you're assigning it
+        echo.activeUser = node;  // or however you're assigning it
       }
       BSTNode? root = echo.bst.root;
 
@@ -204,7 +204,7 @@ class UserController extends GetxController {
   }
   Future<void> logOut() async {
     try {
-      Echo.activeUser = null;
+      echo.activeUser = null;
       isLoggedIn = false;
       update();
       Get.toNamed(AppRouter.loginScreen);

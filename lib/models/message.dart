@@ -6,7 +6,7 @@ class MessageNode {
   String sender;
   String content;
   String timestamp;
-  bool sentByMe; // ✅ true = sent, false = received
+  bool sentByMe;
   MessageNode? next;
 
   MessageNode({

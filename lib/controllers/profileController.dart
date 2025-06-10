@@ -192,8 +192,9 @@ class ProfileController extends GetxController {
   String imageBase64 = '';
   String bio = '';
 
+  final Echo echo = Get.find<Echo>();
   // Reference to the active logged-in UserNode from Echo
-  BSTNode? get activeUserNode => Echo.activeUser;
+  BSTNode? get activeUserNode => echo.activeUser;
   User? get currentUser => activeUserNode?.user;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
