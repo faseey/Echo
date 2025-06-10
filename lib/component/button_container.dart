@@ -34,7 +34,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Icon(widget.icon,color: isSelected? Colors.white : Colors.black,),
-            Text(widget.title,style: TextStyle(fontSize: 10,color: isSelected?Colors.white:Colors.black,)
+            Text(widget.title,style: TextStyle(fontSize: 8,color: isSelected?Colors.white:Colors.black,)
             ) ],),
       ),
     );

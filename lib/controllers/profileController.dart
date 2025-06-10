@@ -1,3 +1,4 @@
+
 /*import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -178,6 +179,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -190,6 +193,8 @@ import '../user_data_model/userService.dart';
 class ProfileController extends GetxController {
   String imagePath = '';
   String imageBase64 = '';
+  String coverPhotoPath = '';
+  String coverPhotoBase64 = '';
   String bio = '';
   final Echo echo = Get.find<Echo>();
   // Reference to the active logged-in UserNode from Echo
@@ -222,6 +227,55 @@ class ProfileController extends GetxController {
       imageBase64 = base64Encode(bytes);
       imagePath = image.path;
       update();
+    }
+  }
+
+  Future<void> getCoverPhoto() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1800,
+        maxHeight: 1800,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        // Update local path
+        coverPhotoPath = pickedFile.path;
+
+        // Convert to base64
+        final bytes = await File(pickedFile.path).readAsBytes();
+        final base64String = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+
+        // Update controller
+        coverPhotoBase64 = base64String;
+
+        // Upload to Firebase Storage
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('cover_photos/${currentUser!.username}.jpg');
+
+        await storageRef.putFile(File(pickedFile.path));
+        final downloadUrl = await storageRef.getDownloadURL();
+
+        // Update Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser!.username)
+            .update({
+          'coverPhotoUrl': downloadUrl,
+          'coverPhotoBase64': base64String,
+        });
+
+        update(); // Refresh UI
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to update cover photo: ${e.toString()}",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -333,7 +387,6 @@ class ProfileController extends GetxController {
 
   Future<void> deletePost(Post post) async {
     if (currentUser == null || activeUserNode == null) return;
-
     activeUserNode!.user.postStack.remove(post); // remove from stack
 
     await savePostsToFirestore(); // update Firestore

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
 
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRouter.loginScreen,
+      initialRoute: AppRouter.onboarding_screen,
       getPages: AppRouter.route,
         theme: ThemeData(
         primarySwatch: Colors.blue,

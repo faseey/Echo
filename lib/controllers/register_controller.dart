@@ -10,11 +10,18 @@ import '../models/echo.dart';  // Adjust path
 class UserController extends GetxController {
   String error = '';
   var isLoggedIn = false;
+
+  bool isPasswordHidden = true;
   final userCollection = FirebaseFirestore.instance.collection('users');
 
 
   // Get Echo instance from GetX
   final Echo echo = Get.find<Echo>();
+
+  void togglePasswordVisibility(){
+    isPasswordHidden = !isPasswordHidden;
+    update();
+  }
 
   Future<void> registerUser(User user) async {
     error = '';
@@ -34,7 +41,6 @@ class UserController extends GetxController {
       // Optionally set activeUser here if you want
       echo.activeUser = echo.bst.search(user.username) ;
       echo.activeUser?.user.user_index =  echo.userCount ;
-
       await userCollection.doc(user.username).update({
         'user_index': echo.userCount,
       });
@@ -156,8 +162,6 @@ class UserController extends GetxController {
       }
 
       print("Login Successful");
-      print("notifications");
-      print(echo.activeUser?.user.notifications.showNotifications());
       isLoggedIn = true;
       echo.activeUser = node;
       User? user = await loadUserFromFirebase(userName);

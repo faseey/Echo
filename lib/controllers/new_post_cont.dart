@@ -95,11 +95,15 @@ class NewPostController extends GetxController {
       // Add to user stack
       currentUser!.postStack.push(imagePost);
 
-      await _firestore.collection('users')
-          .doc(currentUser!.username)
-          .set({
-        'posts': currentUser!.postStack.toJsonList(),
-      }, SetOptions(merge: true));
+      final postList = currentUser!.postStack.toJsonList();
+
+      if (postList.isNotEmpty) {
+        await _firestore.collection('users')
+            .doc(currentUser!.username)
+            .set({
+          'posts': postList,
+        }, SetOptions(merge: true));
+      }
 
 
       final jsonList = currentUser!.postStack.toJsonList();
@@ -127,7 +131,7 @@ class NewPostController extends GetxController {
     if (currentUser == null) return;
 
     try {
-      firestorePosts.clear(); // Clear any old posts
+      //firestorePosts.clear(); // Clear any old posts
 
       // Use username instead of email
       final userDoc = await _firestore.collection('users').doc(currentUser!.username).get();
@@ -171,7 +175,10 @@ class NewPostController extends GetxController {
     }
 
 
-    await _firestore.doc(activeUserNode!.user.username).update({
+    await _firestore
+        .collection('users')
+        .doc(activeUserNode!.user.username)
+        .update({
       'posts': stack.toJsonList(),
     });
 
@@ -180,11 +187,19 @@ class NewPostController extends GetxController {
   }
 
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadImagePostsFromFirestore(); // Load saved posts from Firestore
+  }
+
+
+
 
   void clearLatestPost() {
     latestPost = null;
     loadImagePostsFromFirestore();
-    //loadImagePostsFromFirestore();
+
     update();
   }
 }

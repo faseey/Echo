@@ -9,6 +9,7 @@ import '../Screen/postScreen.dart';
 import '../Screen/profileScreen.dart';
 import '../Screen/registerScreen.dart';
 import '../models/echo.dart';
+import '../onboarding_screen/onboarding_screen.dart';
 import 'bottomNavbar.dart';
 
 class AppRouter{
@@ -21,6 +22,7 @@ class AppRouter{
   static const newPostScreen = "/newPostScreen";
   static const messagescreen = "/messagescreen";
   static const newsfeedscreen = "/newsfeedscreen";
+  static const onboarding_screen = "/onboarding_screen";
 
 
   static final route = [
@@ -33,6 +35,7 @@ class AppRouter{
     GetPage(name: bottomnavbar, page: ()=>Bottomnavbar()),
     GetPage(name: messagescreen, page: ()=>MessageScreen()),
     GetPage(name: newsfeedscreen, page: ()=>NewsFeedScreen()),
+    GetPage(name: onboarding_screen, page: ()=>Onboarding_screen()),
 
 
   ];
