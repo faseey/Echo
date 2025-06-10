@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import '../models/friendlist.dart'; // your RequestQueue and Request models
 import '../user_data_model/userService.dart';
 
 class FriendController extends GetxController {
+  final suggestedUsernames = <String>[].obs;
   final requestTextController = TextEditingController();
   final Echo echo = Get.find<Echo>();
 
@@ -157,6 +159,79 @@ class FriendController extends GetxController {
       print("Failed to load friend list: $e");
     }
   }
+  Future<List<String>> getFriendSuggestions() async {
+    // Step 1: Get the adjacency matrix from Echo
+    List<List<int>> adj = Echo.connections ?? [];
+    int? userIndex = currentUser?.user_index;
+
+
+
+    // Step 2: BFS to find level-2 friends
+    List<int> level2Indexes = await getFriendsOfFriends(userIndex!, adj);
+
+    // Step 3: Sort the indexes
+    level2Indexes.sort();
+
+    print("level2 indexes");
+    print(level2Indexes);
+    await echo.loadUsernamesFromFirebase();
+    print("userlist");
+    print(Echo.usernames);
+    // Step 4: Map to usernames
+    List<String> suggestions = level2Indexes
+        .where((i) => i >= 0 && i < Echo.usernames.length)
+        .map((i) => Echo.usernames[i])
+        .toList();
+    print("[suggestions]");
+    print(suggestions);
+    return suggestions;
+
+  }
+
+  Future<List<int>> getFriendsOfFriends(int startIndex, List<List<int>> adj) async {
+    int n = adj.length;
+    List<bool> visited = List.filled(n, false);
+    List<int> level = List.filled(n, 0);
+    Queue<int> queue = Queue();
+
+    visited[startIndex] = true;
+    level[startIndex] = 0;
+    queue.add(startIndex);
+
+    List<int> friendsOfFriends = [];
+
+    while (queue.isNotEmpty) {
+      int node = queue.removeFirst();
+
+      if (level[node] >= 3) continue; // stop processing if we reached level 3
+
+      for (int neighbor = 0; neighbor < n; neighbor++) {
+        if (adj[node][neighbor] == 1 && !visited[neighbor]) {
+          visited[neighbor] = true;
+          level[neighbor] = level[node] + 1;
+          queue.add(neighbor);
+
+          if (level[neighbor] == 2) {
+            friendsOfFriends.add(neighbor);
+          }
+        }
+      }
+    }
+    print(friendsOfFriends);
+    return friendsOfFriends;
+
+  }
+  Future<void> loadSuggestions() async {
+    try {
+      List<String> suggestions = await getFriendSuggestions();
+      suggestedUsernames.assignAll(suggestions);
+    } catch (e) {
+      print("Error loading BFS suggestions: $e");
+    }
+  }
+
+
+
 
   /// Save friend requests of the user to Firestore
   Future<void> saveRequestsToFirestore(String username) async {

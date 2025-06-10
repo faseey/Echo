@@ -15,6 +15,7 @@ class Echo extends GetxController {
   BST bst = BST();
   static List<List<int>>? connections;
   static BSTNode? activeUser;
+  static List<String> usernames = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String connectionsDocId = "connections_matrix";
@@ -29,30 +30,7 @@ class Echo extends GetxController {
     await loadConnectionsFromFirebase();
   }
 
-  //  Find index of user in BST (in-order)
-  int getUserIndex(String username) {
-    List<int> resultIndex = [-1];
-    _findIndexInBST(bst.root, username, 0, resultIndex);
-    return resultIndex[0];
-  }
 
-  int _findIndexInBST(BSTNode? node, String username, int currentIndex,
-      List<int> resultIndex) {
-    if (node == null) return currentIndex;
-
-    // Traverse left
-    currentIndex =
-        _findIndexInBST(node.left, username, currentIndex, resultIndex);
-
-    // Check current node
-    if (node.user.username == username) {
-      resultIndex[0] = currentIndex;
-    }
-    currentIndex++;
-
-    // Traverse right
-    return _findIndexInBST(node.right, username, currentIndex, resultIndex);
-  }
 
   // Update local adjacency matrix size and sync to Firebase
   Future<List<List<int>>> getUpdatedConnections() async {
@@ -76,7 +54,6 @@ class Echo extends GetxController {
 
     return tempConnections;
   }
-
 
   Future<void> saveConnectionsToFirebase() async {
     if (connections == null) return;
@@ -123,4 +100,35 @@ class Echo extends GetxController {
       }
     }
   }
+  Future<void> saveUsernamesToFirebase() async {
+    try {
+      await _firestore.collection('app_data').doc('usernames').set({
+        'usernames': Echo.usernames,
+      });
+
+      print('Usernames saved to Firestore successfully.');
+    } catch (e) {
+      print('Error saving usernames to Firestore: $e');
+    }
+  }
+  Future<void> loadUsernamesFromFirebase() async {
+    try {
+      DocumentSnapshot snapshot =
+      await _firestore.collection('app_data').doc('usernames').get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic>? data =
+        snapshot.data() as Map<String, dynamic>?;
+
+        if (data != null && data['usernames'] is List) {
+          Echo.usernames = List<String>.from(data['usernames']);
+          print('Usernames loaded successfully.');
+        }
+      }
+    } catch (e) {
+      print('Error loading usernames from Firestore: $e');
+    }
+  }
+
+
 }

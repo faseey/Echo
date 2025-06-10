@@ -53,6 +53,7 @@ class MessageController extends GetxController {
 
   }
 
+
   // Search a user in BST and load chat
   Future<bool> searchUserAndLoadChat(String searchedUsername) async {
     final Echo echo = Get.find<Echo>();
@@ -118,9 +119,11 @@ class MessageController extends GetxController {
 
   Future<void> saveUserToFirebase(User user) async {
     final firestore = FirebaseFirestore.instance;
-    await firestore.collection('users').doc(user.username).set(user.toJson());
+    await firestore.collection('users').doc(user.username).set(user.toJson(), SetOptions(merge: true));
     print('[saveUserToFirebase] Data saved for ${user.username}');
   }
+
+
   Future<User?> loadUserFromFirebase(String username) async {
     final firestore = FirebaseFirestore.instance;
     final doc = await firestore.collection('users').doc(username).get();

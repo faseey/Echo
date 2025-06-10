@@ -20,6 +20,8 @@ class BST {
     await userCollection.doc(user.username).set(user.toJson());
   }
 
+
+
   BSTNode _insert(BSTNode? node, User user) {
     if (node == null) return BSTNode(user);
     if (user.username.compareTo(node.user.username) < 0) {
@@ -51,3 +53,4 @@ class BST {
     }
   }
 }
+

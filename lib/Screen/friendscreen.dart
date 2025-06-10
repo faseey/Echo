@@ -12,23 +12,33 @@ class FriendScreen extends StatelessWidget {
   // State observables for toggling views
   final RxBool showRequests = false.obs;
   final RxBool showFriends = false.obs;
+  final RxBool showSuggestions = false.obs;
 
   void toggleRequests() async {
     if (!showRequests.value) {
       await controller.loadRequestsFromFirestore();
     }
     showRequests.value = !showRequests.value;
-    showFriends.value = false; // Hide friends list when showing requests
+    showFriends.value = false;
+    showSuggestions.value = false;
   }
 
   void toggleFriends() async {
     if (!showFriends.value) {
-      await controller.loadFriendListFromFirestore(
-        controller.currentUser!.username,
-      );
+      await controller.loadFriendListFromFirestore(controller.currentUser!.username);
     }
     showFriends.value = !showFriends.value;
-    showRequests.value = false; // Hide requests list when showing friends
+    showRequests.value = false;
+    showSuggestions.value = false;
+  }
+
+  void toggleSuggestions() async {
+    if (!showSuggestions.value) {
+      await controller.loadSuggestions(); // Add this method in your controller
+    }
+    showSuggestions.value = !showSuggestions.value;
+    showRequests.value = false;
+    showFriends.value = false;
   }
 
   @override
@@ -92,7 +102,7 @@ class FriendScreen extends StatelessWidget {
 
               SizedBox(height: 16),
 
-              // Buttons for actions
+              // Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -124,6 +134,11 @@ class FriendScreen extends StatelessWidget {
                     title: 'Show Friends',
                     icon: Icons.group,
                     onTab: toggleFriends,
+                  ),
+                  ButtonContainer(
+                    title: 'Suggestions',
+                    icon: Icons.recommend,
+                    onTab: toggleSuggestions,
                   ),
                 ],
               ),
@@ -210,6 +225,44 @@ class FriendScreen extends StatelessWidget {
                         return ListTile(
                           leading: Icon(Icons.person_outline),
                           title: Text(friends[index]),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }),
+
+              SizedBox(height: 24),
+
+              // Suggestions View
+              Obx(() {
+                if (!showSuggestions.value) return SizedBox.shrink();
+                final suggestions = controller.suggestedUsernames;
+                return suggestions.isEmpty
+                    ? Text("No suggestions found.")
+                    : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Friend Suggestions:",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: suggestions.length,
+                      itemBuilder: (context, index) {
+                        final username = suggestions[index];
+                        return ListTile(
+                          leading: Icon(Icons.person_outline),
+                          title: Text(username),
+                          trailing: IconButton(
+                            icon: Icon(Icons.person_add_alt_1),
+                            onPressed: () async {
+                              await controller.sendFriendRequest(username);
+                            },
+                          ),
                         );
                       },
                     ),

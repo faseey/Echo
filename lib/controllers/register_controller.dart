@@ -3,6 +3,7 @@ import 'package:echo_app/controllers/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/route.dart';
+import '../models/bst.dart';
 import '../user_data_model/userService.dart';
 import '../models/echo.dart';  // Adjust path
 
@@ -37,6 +38,10 @@ class UserController extends GetxController {
         'user_index': Echo.userCount,
       });
       Echo.userCount++;
+      Echo.usernames.add(user.username);
+      await echo.saveUsernamesToFirebase();
+
+
       final newConnections = await echo.getUpdatedConnections();
 
       // Assign only if non-empty (optional check)
@@ -153,9 +158,12 @@ class UserController extends GetxController {
       isLoggedIn = true;
       Echo.activeUser = node;
       User? user = await loadUserFromFirebase(userName);
+      await echo.loadUsernamesFromFirebase();
       if (user != null) {
         Echo.activeUser = node;  // or however you're assigning it
       }
+
+
 
       update();
       print("Navigating to bottomnavbar...");
