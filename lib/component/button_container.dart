@@ -20,8 +20,8 @@ class _ButtonContainerState extends State<ButtonContainer> {
     return GestureDetector(
       onTap: widget.onTab,
       child: Container(
-        height: 100,
-        width: 100,
+        height: 80,
+        width: 80,
         decoration: BoxDecoration(
             color: isSelected ? Colors.blueGrey: Colors.white,
             borderRadius: BorderRadius.circular(10),

@@ -17,10 +17,11 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    //NewFeed(),
+    NewPostScreen(),
+
 
     FriendScreen(),
-    NewPostScreen(),
+    Text("news feed"),
     //PostScreen(),
     MessageScreen(),
     ProfileScreen(),
@@ -39,7 +40,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
         items: const <Widget>[
           Icon(Icons.home, size: 30, color: Colors.black),
           Icon(Icons.group, size: 30, color: Colors.black),
-          Icon(Icons.add_box, size: 30, color: Colors.black),
+          Icon(Icons.notifications, size: 30, color: Colors.black),
           Icon(Icons.inbox, size: 30, color: Colors.black),
           Icon(Icons.person, size: 30, color: Colors.black),
         ],
