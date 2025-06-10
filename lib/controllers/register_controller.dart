@@ -34,6 +34,7 @@ class UserController extends GetxController {
       // Optionally set activeUser here if you want
       echo.activeUser = echo.bst.search(user.username) ;
       echo.activeUser?.user.user_index =  echo.userCount ;
+
       await userCollection.doc(user.username).update({
         'user_index': echo.userCount,
       });
@@ -155,6 +156,8 @@ class UserController extends GetxController {
       }
 
       print("Login Successful");
+      print("notifications");
+      print(echo.activeUser?.user.notifications.showNotifications());
       isLoggedIn = true;
       echo.activeUser = node;
       User? user = await loadUserFromFirebase(userName);

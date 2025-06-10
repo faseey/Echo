@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../models/NotificationList.dart';
 import '../models/friendlist.dart';
 import '../models/message.dart';
 import '../models/newsfeedheap.dart';
@@ -23,6 +25,7 @@ class User {
  // ImagePostStack _imagePostStack;
   Messages _message;
   NewsFeedHeap _newsfeedheap;
+  NotificationStack _notification;
 
   User({
     required String username,
@@ -41,7 +44,12 @@ class User {
   //  ImagePostStack? imagePostStack,
     Messages? message,
     NewsFeedHeap? newsfeedheap,
-  })  : _username = username,
+    NotificationStack? notification,
+
+
+
+
+})  : _username = username,
         _email = email,
         _password = password,
         _firstname = firstname,
@@ -56,7 +64,9 @@ class User {
         _requestQueue = requestQueue ?? RequestQueue(),
        // _imagePostStack = imagePostStack ?? ImagePostStack(),
         _message = message ?? Messages(),
-        _newsfeedheap = newsfeedheap ?? NewsFeedHeap();
+        _newsfeedheap = newsfeedheap ?? NewsFeedHeap(),
+        _notification = notification ?? NotificationStack();
+
 
 
   //  Public getters
@@ -76,13 +86,15 @@ class User {
  // ImagePostStack get imagePostStack => _imagePostStack;
   Messages get message => _message;
   NewsFeedHeap get newsfeedheap => _newsfeedheap;
+  NotificationStack get notifications => _notification;
 
 
   // Public setters
   set profileImageUrl(String url) => _profileImageUrl = url;
   set bio(String b) => _bio = b;
   set lastSignin(String value) => _lastSignin = value;
-  set user_index(int value) => user_index = value;
+  set user_index(int value) => _userIndex = value;
+
 
 
   Map<String, dynamic> toJson() => {
@@ -101,6 +113,8 @@ class User {
     'friendRequests': _requestQueue.toJsonList(),
     'chatList': _message.toJsonList(),
     'newsFeed': _newsfeedheap.toJsonList(),
+    'notifications': _notification.toList(),
+
 
   };
 
@@ -123,6 +137,10 @@ class User {
     if (json['newsFeed'] != null) {
       newsFeed.loadFromJsonList(json['newsFeed']);
     }
+    final notificationStack = NotificationStack();
+    if (json['notifications'] != null) {
+      notificationStack.loadFromList(json['notifications']);
+    }
 
 
 
@@ -142,8 +160,17 @@ class User {
       requestQueue: requestQueue,
       message: messages,
       newsfeedheap: newsFeed,
+      notification: notificationStack,
+
 
     );
   }
-
+  Future<void> saveNotificationsToFirestore() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_username)
+        .update({
+      'notifications': _notification.toList(),
+    });
+  }
 }

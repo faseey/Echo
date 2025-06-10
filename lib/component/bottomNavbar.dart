@@ -4,6 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../Screen/friendscreen.dart';
 import '../Screen/messagescreen.dart';
 import '../Screen/new_post_screen.dart';
+import '../Screen/notificationsscreen.dart';
 import '../Screen/postScreen.dart';
 import '../Screen/profileScreen.dart';
 
@@ -22,8 +23,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
 
     FriendScreen(),
-    NewsFeedScreen(),
-    //PostScreen(),
+    //NewsFeedScreen(),
+    NotificationScreen(),
     MessageScreen(),
     ProfileScreen(),
   ];

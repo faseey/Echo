@@ -57,6 +57,7 @@ class FriendController extends GetxController {
       return;
     }
     else{
+      print("i am here");
       echo.connections![senderIndex][receiverIndex] = 1;
       await echo.saveConnectionsToFirebase();
 
@@ -68,6 +69,13 @@ class FriendController extends GetxController {
     );
 
     receiverNode.user.requestQueue.addRequest(request);
+    receiverNode.user.notifications.addNotification('request',currentUser!.username);
+    receiverNode.user.notifications.showNotifications();
+      await receiverNode.user.saveNotificationsToFirestore();
+
+    print( receiverNode.user.username);
+
+
 
     // Save updated requests to Firebase for the receiver
     await saveRequestsToFirestore(friendUsername);
@@ -77,7 +85,7 @@ class FriendController extends GetxController {
   }
 
 
-  Future<void> acceptRequestBySender(String senderUsername) async {
+  Future<void> acceptRequestofSender(String senderUsername) async {
     if (currentUser == null) return;
 
     final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
@@ -85,6 +93,13 @@ class FriendController extends GetxController {
       // Step 1: Accept connection in Echo matrix
       echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
       echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
+      final senderrNode = Echo.instance.bst.search(senderUsername);
+      print(senderUsername);
+      senderrNode?.user.notifications.addNotification('accepted', currentUser!.username);
+
+      print(senderrNode?.user.notifications.showNotifications());
+      await senderrNode?.user.saveNotificationsToFirestore();
+
       await echo.saveConnectionsToFirebase();
 
       // Step 2: Add each other to friendList in Firestore

@@ -41,6 +41,7 @@ class MessageController extends GetxController {
     final receiverNode = echo.bst.search(receiver);
     if (receiverNode != null) {
       receiverNode.user.message.addMessage(sender, receivedMsg);
+      receiverNode.user.notifications.addNotification('message', sender);
       print('[sendMessage] Received message added to receiver\'s chat list');
       await saveUserToFirebase(receiverNode!.user);
       await loadUserFromFirebase(receiverNode!.user.username);

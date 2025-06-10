@@ -181,7 +181,7 @@ class FriendScreen extends StatelessWidget {
                                   icon: Icon(Icons.check, color: Colors.green),
                                   tooltip: "Accept",
                                   onPressed: () async {
-                                    await controller.acceptRequestBySender(senderUsername);
+                                    await controller.acceptRequestofSender(senderUsername);
                                   },
                                 ),
                                 IconButton(
