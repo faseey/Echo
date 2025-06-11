@@ -1,10 +1,11 @@
 class NewsFeedNode {
   String post;
-  String date; // Format: "YYYY-MM-DD HH:MM:SS"
+  String date;
   String username;
   String imageBase64;
+  String profileimg; // <-- New field
 
-  NewsFeedNode(this.post, this.date, this.username, this.imageBase64);
+  NewsFeedNode(this.post, this.date, this.username, this.imageBase64, this.profileimg);
 
   Map<String, dynamic> toJson() {
     return {
@@ -12,6 +13,7 @@ class NewsFeedNode {
       'date': date,
       'username': username,
       'imageBase64': imageBase64,
+      'profileimg': profileimg, // <-- Add here
     };
   }
 
@@ -21,9 +23,11 @@ class NewsFeedNode {
       json['date'] ?? '',
       json['username'] ?? '',
       json['imageBase64'] ?? '',
+      json['profileimg'] ?? '', // <-- Add here
     );
   }
 }
+
 
 
 class NewsFeedHeap {
@@ -72,8 +76,8 @@ class NewsFeedHeap {
     _heap[j] = temp;
   }
 
-  void addPost(String post, String date, String username, String imageBase64) {
-    final node = NewsFeedNode(post, date, username, imageBase64);
+  void addPost(String post, String date, String username, String imageBase64,String profileimg) {
+    final node = NewsFeedNode(post, date, username, imageBase64,profileimg);
     _heap.add(node);
     _heapifyUp(_heap.length - 1);
   }

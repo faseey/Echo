@@ -49,7 +49,7 @@ class RegisterScreen extends StatelessWidget {
                     validator: (value) {
 
                       if(value == null || value.isEmpty)  return 'Enter username' ;
-                      if(value.length <3) return "invalid user";
+                      //if(value.length <3) return "invalid user";
 
                     }
 

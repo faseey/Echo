@@ -285,10 +285,19 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                           padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
-                              const CircleAvatar(
+                              CircleAvatar(
                                 radius: 18,
-                                child: Icon(Icons.person, size: 20),
+                                backgroundColor: Colors.grey.shade300,
+                                backgroundImage: (post.profileimg.isNotEmpty &&
+                                    post.profileimg.startsWith('data:image'))
+                                    ? MemoryImage(base64Decode(post.profileimg.split(',').last))
+                                    : null,
+                                child: (post.profileimg.isEmpty ||
+                                    !post.profileimg.startsWith('data:image'))
+                                    ? const Icon(Icons.person, size: 20)
+                                    : null,
                               ),
+
                               const SizedBox(width: 10),
                               Text(
                                 post.username,

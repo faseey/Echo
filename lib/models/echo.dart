@@ -110,6 +110,8 @@ class Echo extends GetxController {
               topPost.post.date,
               topPost.post.username,
               topPost.post.imageBase64,
+                friendNode.user.profileImageUrl,
+
             );
           }
         }
