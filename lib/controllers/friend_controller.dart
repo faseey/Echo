@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../models/bst.dart';
 import '../models/echo.dart';
 import '../models/friendlist.dart'; // your RequestQueue and Request models
-
 import '../user_data_model/userService.dart';
+
+
 
 class FriendController extends GetxController {
   final suggestedUsernames = <String>[].obs;
@@ -25,13 +25,13 @@ class FriendController extends GetxController {
 
 
 
-  /// Send friend request
+  ///////////////// Send friend request//////////////////////////
   Future<void> sendFriendRequest(String friendUsername) async {
     if (currentUser == null) {
       Get.snackbar("Error", "No active user",backgroundColor: Color(0xfffffff),duration: Duration(seconds: 2),colorText: Color(0xffffffff));
       return;
     }
-
+    //////////////////the person who will recieve the request////////////////
     final receiverNode = Echo.instance.bst.search(friendUsername.trim());
     if (receiverNode == null) {
       Get.snackbar("Error", "User not found");
@@ -41,9 +41,15 @@ class FriendController extends GetxController {
     Get.snackbar("Error","YOU CANNOT send request to yourself");
     return;
   }
+
+  //////////taking indexes for connections///////////
     int senderIndex =  currentUser!.userIndex;
     int receiverIndex =  receiverNode.user.userIndex;
 
+
+
+
+    /////////////////////validation//////////////////
     if(echo.connections?[senderIndex][receiverIndex] ==1 && echo.connections?[receiverIndex][senderIndex] ==1 ){
       Get.snackbar("Error","You are already friends with $friendUsername");
       return;
@@ -57,7 +63,8 @@ class FriendController extends GetxController {
       return;
     }
     else{
-      print("i am here");
+
+      /////////////////////validation passed//////////////////
       echo.connections![senderIndex][receiverIndex] = 1;
       await echo.saveConnectionsToFirebase();
 
@@ -66,14 +73,15 @@ class FriendController extends GetxController {
       friendUsername: currentUser!.username,
       senderIndex: currentUser!.userIndex,
       receiverIndex: receiverNode.user.userIndex,
+      /////indexes////for updating connections upon action
     );
-
+    //////////////apeended to receiverr Q///////////////////
     receiverNode.user.requestQueue.addRequest(request);
+    ///////adding notifcation  to the receiver side/////////
     receiverNode.user.notifications.addNotification('request',currentUser!.username);
-    receiverNode.user.notifications.showNotifications();
-      await receiverNode.user.saveNotificationsToFirestore();
+    await receiverNode.user.saveNotificationsToFirestore();
 
-    print( receiverNode.user.username);
+
 
 
 
@@ -87,25 +95,27 @@ class FriendController extends GetxController {
 
   Future<void> acceptRequestofSender(String senderUsername) async {
     if (currentUser == null) return;
-
-    final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
+    //////////here the current user will accept the received requests////////
+    final requestNode = currentUser!.requestQueue.getNodeOfSender(senderUsername);
     if (requestNode != null) {
-      // Step 1: Accept connection in Echo matrix
+      // /////////Step 1: Establishing connection///////////
       echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 1;
       echo.connections![requestNode.request.receiverIndex][requestNode.request.senderIndex] = 1;
-      final senderrNode = Echo.instance.bst.search(senderUsername);
-      print(senderUsername);
-      senderrNode?.user.notifications.addNotification('accepted', currentUser!.username);
 
-      print(senderrNode?.user.notifications.showNotifications());
-      await senderrNode?.user.saveNotificationsToFirestore();
 
+      ////////the one who sent req is sendernode noti will be added to his stack/////
+      final senderNode = Echo.instance.bst.search(senderUsername);
+
+      senderNode?.user.notifications.addNotification('accepted', currentUser!.username);
+      await senderNode?.user.saveNotificationsToFirestore();
+        ////finally saving connection its a collection  (overall matrix)////////
       await echo.saveConnectionsToFirebase();
 
       // Step 2: Add each other to friendList in Firestore
       await addFriendsToEachOther(currentUser!.username, senderUsername);
 
       // Step 3: Remove request and update
+      //since current user accpeted request so it will be dno more available there/////
       currentUser!.requestQueue.deleteRequestBySender(senderUsername);
       await saveRequestsToFirestore(currentUser!.username);
       await loadRequestsFromFirestore();
@@ -115,11 +125,16 @@ class FriendController extends GetxController {
 
   Future<void> deleteRequestBySender(String senderUsername) async {
     if (currentUser == null) return;
-    final requestNode = currentUser!.requestQueue.getRequestBySender(senderUsername);
-    if (requestNode != null) {
 
+
+    ///current user fining the specifec request to be deleted//////
+    final requestNode = currentUser!.requestQueue.getNodeOfSender(senderUsername);
+    if (requestNode != null) {
+        ////upaditing connection back to 0 of the sender of the req
       echo.connections![requestNode.request.senderIndex][requestNode.request.receiverIndex] = 0;
       await echo.saveConnectionsToFirebase();
+
+      //now removing it from the request list as well//////
       currentUser!.requestQueue.deleteRequestBySender(senderUsername);
       await saveRequestsToFirestore(currentUser!.username);
 
@@ -156,6 +171,7 @@ class FriendController extends GetxController {
     await updateFriendList(user1, user1List);
     await updateFriendList(user2, user2List);
   }
+
   RxList<String> friendUsernames = <String>[].obs;
 
   Future<void> loadFriendListFromFirestore(String username) async {

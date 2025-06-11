@@ -179,6 +179,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echo_app/component/route.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -211,6 +212,11 @@ class ProfileController extends GetxController {
     } else {
       log("No active user node found");
     }
+  }
+
+
+  void gotoHoneScreen(){
+    Get.toNamed(AppRouter.newPostScreen);
   }
 
   Future<void> getImage() async {

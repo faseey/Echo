@@ -30,8 +30,48 @@ class Echo extends GetxController {
     await bst.loadFromFirebase();
     await loadConnectionsFromFirebase();
   }
-
-  void buildNewsFeed() {
+  //
+  // void buildNewsFeed() {
+  //   if (activeUser == null) {
+  //     print("Error: No active user");
+  //     return;
+  //   }
+  //
+  //   activeUser!.user.newsfeedheap.clearNewsFeed();
+  //
+  //   int activeUserIndex = activeUser!.user.userIndex;
+  //   if (activeUserIndex == -1) {
+  //     print("Error: Active user not found in the system");
+  //     return;
+  //   }
+  //   print(activeUser?.user.username);
+  //   print(activeUser?.user.userIndex);
+  //   List<int> directFriends = [];
+  //
+  //   for (int i = 0; i < userCount; i++) {
+  //     if (connections?[activeUserIndex][i] == 1) {
+  //       print(i);
+  //       directFriends.add(i);
+  //     }
+  //   }
+  //   print("printing name $directFriends");
+  //   List<String> directFriendsUsernames = getUsernamesFromIndices(directFriends);
+  //   //  print("News Feed for ${activeUser!.username}:");
+  //   print("printing name $directFriendsUsernames");
+  //   for (String username in directFriendsUsernames) {
+  //
+  //     BSTNode? friendUser = bst.search(username);
+  //     print(friendUser?.user.username);// You'll need to implement this method if it's not already there
+  //     if (friendUser != null && friendUser.user.postStack.isNotEmpty()) {
+  //       print(username);
+  //       PostNode? topPost = friendUser.user.postStack.peek(); // top of stack
+  //       activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,topPost!.post.imageBase64);
+  //
+  //     }
+  //   }
+  //
+  // }
+  Future<void> buildNewsFeed() async {
     if (activeUser == null) {
       print("Error: No active user");
       return;
@@ -41,36 +81,67 @@ class Echo extends GetxController {
 
     int activeUserIndex = activeUser!.user.userIndex;
     if (activeUserIndex == -1) {
-      print("Error: Active user not found in the system");
+      print("Error: Active user index not found");
       return;
     }
-    print(activeUser?.user.username);
-    print(activeUser?.user.userIndex);
+
     List<int> directFriends = [];
 
     for (int i = 0; i < userCount; i++) {
       if (connections?[activeUserIndex][i] == 1) {
-        print(i);
         directFriends.add(i);
       }
     }
-    print("printing name $directFriends");
-    List<String> directFriendsUsernames = getUsernamesFromIndices(directFriends);
-    //  print("News Feed for ${activeUser!.username}:");
-    print("printing name $directFriendsUsernames");
-    for (String username in directFriendsUsernames) {
 
-      BSTNode? friendUser = bst.search(username);
-      print(friendUser?.user.username);// You'll need to implement this method if it's not already there
-      if (friendUser != null && friendUser.user.postStack.isNotEmpty()) {
-        print(username);
-        PostNode? topPost = friendUser.user.postStack.peek(); // top of stack
-        activeUser!.user.newsfeedheap.addPost(topPost!.post.content,  topPost!.post.date,topPost!.post.username,topPost!.post.imageBase64);
+    List<String> directFriendUsernames = getUsernamesFromIndices(directFriends);
 
+    for (String username in directFriendUsernames) {
+      BSTNode? friendNode = bst.search(username);
+      if (friendNode != null) {
+        // 🔁 1. Load posts from Firestore
+        await loadUserPostsFromFirestore(friendNode);
+
+        // 🟢 2. Get latest post (after loading)
+        if (friendNode.user.postStack.isNotEmpty()) {
+          PostNode? topPost = friendNode.user.postStack.peek();
+          if (topPost != null) {
+            activeUser!.user.newsfeedheap.addPost(
+              topPost.post.content,
+              topPost.post.date,
+              topPost.post.username,
+              topPost.post.imageBase64,
+            );
+          }
+        }
       }
     }
-
   }
+
+
+  Future<void> loadUserPostsFromFirestore(BSTNode userNode) async {
+    final firestore = FirebaseFirestore.instance;
+    final username = userNode.user.username;
+
+    try {
+      final doc = await firestore.collection('users').doc(username).get();
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        final postsJson = data['posts'] ?? [];
+
+        final posts = postsJson.map((json) => Post.fromJson(json)).toList();
+
+        // Replace user's current post stack
+        userNode.user.postStack.clear();
+        for (var post in posts.reversed) {
+          userNode.user.postStack.push(post);
+        }
+      }
+    } catch (e) {
+      print("⚠️ Failed to load posts for $username: $e");
+    }
+  }
+
+
 
   List<String> getUsernamesFromIndices(List<int> indices) {
     List<String> username = [];

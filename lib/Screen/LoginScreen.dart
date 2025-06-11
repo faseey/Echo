@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
             child: Column(
               children: [
-                Icon(Icons.lock,size: 100,),
+                Icon(Icons.lock,size: 100,color: Color(0xff123456),),
                 Center(child: Text("Welcome Echo!",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)),
                 Center(child: Text("Sign in your Account",style: TextStyle(fontSize: 13),)),
                 SizedBox(height: 40,),
@@ -115,7 +115,7 @@ class LoginScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               controller.error,
-                              style: const TextStyle(color: Colors.red),
+                              style: const TextStyle(color: Color(0xff123456)),
                             ),
                           ),
 

@@ -19,11 +19,8 @@ class _BottomnavbarState extends State<Bottomnavbar> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    NewPostScreen(),
-
-
+    NewsFeedScreen(),
     FriendScreen(),
-    //NewsFeedScreen(),
     NotificationScreen(),
     MessageScreen(),
     ProfileScreen(),

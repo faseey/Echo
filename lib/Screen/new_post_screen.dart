@@ -185,13 +185,13 @@ class NewPostScreen extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Billabong',
               fontSize: 30,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           centerTitle: true,
           elevation: 0,
         ),
-        drawer:  MyDrawer(),
+        //drawer:  MyDrawer(),
         backgroundColor: Colors.white,
         body: Column(
           children: [

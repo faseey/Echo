@@ -47,6 +47,7 @@ class FriendScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffd5e4f1),
       key: _scaffoldKey,
       drawer: MyDrawer(),
       body: Column(
@@ -56,7 +57,7 @@ class FriendScreen extends StatelessWidget {
             height: 200,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color(0xff123456),
+              color: Color(0xff30567c),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(60),
                 bottomRight: Radius.circular(60),

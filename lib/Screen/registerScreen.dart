@@ -36,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
             key: _formKey,
             child: ListView(
               children: [
-                Icon(Icons.lock,size: 50,),
+                Icon(Icons.lock,size: 50,color: Color(0xff123456),),
                 Center(child: Text("Lets create an account for you",style: TextStyle(color: Colors.black,fontSize: 13),)),
                 const SizedBox(height: 20),
                 // Username

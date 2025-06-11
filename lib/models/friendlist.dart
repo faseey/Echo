@@ -172,8 +172,12 @@ class RequestQueue extends GetxController{
 
 
     while (current != null) {
+
+      ////traversing thruu nodes to match the username of the sender of request ///////
       if (current.request.friendUsername.toLowerCase().trim() == senderUsername.toLowerCase().trim())
       {
+
+        ///meand its is on top/////
         if (prev == null) {
           front = current.next;
         } else {
@@ -193,9 +197,9 @@ class RequestQueue extends GetxController{
 
   }
 
-
-  RequestNode? getRequestBySender(String senderUsername) {
-    RequestNode? current = front;
+      ////use to find the node in the q of the sender
+  RequestNode? getNodeOfSender(String senderUsername) {
+    RequestNode? current = front; //front node is the attribute of ReqQ class
     while (current != null) {
       if (current.request.friendUsername == senderUsername) {
         return current;
