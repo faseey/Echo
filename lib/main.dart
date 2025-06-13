@@ -8,8 +8,8 @@ import 'Screen/registerScreen.dart';
 import 'component/bottomNavbar.dart';
 import 'component/route.dart';
 
-import 'controllers/MessageController.dart';
-import 'controllers/register_controller.dart';
+import 'controllers/message.dart';
+import 'controllers/register_login.dart';
 import 'models/echo.dart';
 
 void main() async {

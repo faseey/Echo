@@ -187,9 +187,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../models/bst.dart';
 import '../models/echo.dart';
-import '../models/post_model.dart';
-import '../models/poststack.dart';
-import '../user_data_model/userService.dart';
+import '../models/postStack.dart';
+import '../models/userService.dart';
 
 class ProfileController extends GetxController {
   String imagePath = '';

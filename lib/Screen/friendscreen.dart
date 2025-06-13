@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/MyDrawer.dart';
 import '../component/button_container.dart';
-import '../controllers/friend_controller.dart';
+import '../controllers/friends_connections.dart';
 
 class FriendScreen extends StatelessWidget {
   FriendScreen({Key? key}) : super(key: key);

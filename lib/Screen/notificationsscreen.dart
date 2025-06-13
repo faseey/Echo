@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/notificationController.dart';
+import '../controllers/notifications.dart';
 import '../models/echo.dart';
 
 class NotificationScreen extends StatefulWidget {

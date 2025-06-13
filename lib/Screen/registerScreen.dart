@@ -2,10 +2,10 @@ import 'package:echo_app/Screen/LoginScreen.dart';
 import 'package:echo_app/component/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/register_controller.dart';
+import '../controllers/register_login.dart';
 import '../models/echo.dart';
 import '../models/bst.dart';
-import '../user_data_model/userService.dart';
+import '../models/userService.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});

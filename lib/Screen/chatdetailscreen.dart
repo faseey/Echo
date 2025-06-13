@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/MessageController.dart';
-import '../models/message.dart';
+import '../controllers/message.dart';
+import '../models/messageLL.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   final String username;
@@ -131,3 +131,4 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 }
+

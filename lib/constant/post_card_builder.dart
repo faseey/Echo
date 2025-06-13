@@ -172,39 +172,39 @@ class PostCardBuilder extends StatelessWidget {
           Divider(),
 
           // Action buttons
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.favorite_border, size: 28),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chat_bubble_outline, size: 28),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send, size: 28),
-                  onPressed: () {},
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.bookmark_border, size: 28),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          //   child: Row(
+          //     children: [
+          //       IconButton(
+          //         icon: const Icon(Icons.favorite_border, size: 28),
+          //         onPressed: () {},
+          //       ),
+          //       IconButton(
+          //         icon: const Icon(Icons.chat_bubble_outline, size: 28),
+          //         onPressed: () {},
+          //       ),
+          //       IconButton(
+          //         icon: const Icon(Icons.send, size: 28),
+          //         onPressed: () {},
+          //       ),
+          //       const Spacer(),
+          //       IconButton(
+          //         icon: const Icon(Icons.bookmark_border, size: 28),
+          //         onPressed: () {},
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
           // Likes count
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "62 likes",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 16),
+          //   child: Text(
+          //     "62 likes",
+          //     style: TextStyle(fontWeight: FontWeight.bold),
+          //   ),
+          // ),
           const SizedBox(height: 4),
 
           // Caption
@@ -226,13 +226,13 @@ class PostCardBuilder extends StatelessWidget {
           const SizedBox(height: 4),
 
           // Comments
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "View all 21 comments",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 16),
+          //   child: Text(
+          //     "View all 21 comments",
+          //     style: TextStyle(color: Colors.grey),
+          //   ),
+          // ),
           const SizedBox(height: 4),
 
           // Timestamp

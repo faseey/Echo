@@ -1,5 +1,3 @@
-
-
 class Post {
   final String username;
   final String imageBase64;
@@ -30,10 +28,7 @@ class Post {
       content: json['content'] ?? '',
     );
   }
-
 }
-
-// Import your ImagePost model
 
 class PostNode {
   final Post post;
@@ -43,33 +38,21 @@ class PostNode {
 }
 
 class PostStack {
-  PostNode? top;
+  PostNode? _top;
 
   void push(Post post) {
-    top = PostNode(post: post, next: top);
-  }
-
-  List<Map<String, dynamic>> toJsonList() {
-    final posts = <Map<String, dynamic>>[];
-    PostNode? current = top;
-    while (current != null) {
-      posts.add(current.post.toJson());
-      current = current.next;
-    }
-    return posts;
+    _top = PostNode(post: post, next: _top);
   }
 
   void remove(Post post) {
-    PostNode? current = top;
+    PostNode? current = _top;
     PostNode? previous;
 
     while (current != null) {
       if (current.post.username == post.username) {
         if (previous == null) {
-          // Removing top node
-          top = current.next;
+          _top = current.next;
         } else {
-          // Bypass the current node
           previous.next = current.next;
         }
         break;
@@ -79,7 +62,6 @@ class PostStack {
     }
   }
 
-
   void loadFromJsonList(List<dynamic> jsonList) {
     for (var postData in jsonList.reversed) {
       final post = Post.fromJson(postData);
@@ -87,9 +69,19 @@ class PostStack {
     }
   }
 
+  List<Map<String, dynamic>> toJsonList() {
+    final posts = <Map<String, dynamic>>[];
+    PostNode? current = _top;
+    while (current != null) {
+      posts.add(current.post.toJson());
+      current = current.next;
+    }
+    return posts;
+  }
+
   List<Post> toList() {
     final result = <Post>[];
-    PostNode? current = top;
+    PostNode? current = _top;
     while (current != null) {
       result.add(current.post);
       current = current.next;
@@ -97,13 +89,9 @@ class PostStack {
     return result;
   }
 
-  PostNode? peek() => top;
+  PostNode? peek() => _top;
 
-  void clear() => top = null;
+  void clear() => _top = null;
 
-  bool isNotEmpty(){
-    print(top?.post.username);
-    return top !=null;
-  }
-  
+  bool isNotEmpty() => _top != null;
 }

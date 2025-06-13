@@ -1,6 +1,6 @@
 /*import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/MessageController.dart';
+import '../controllers/message.dart';
 import 'chatdetailscreen.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -161,7 +161,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/MessageController.dart';
+import '../controllers/message.dart';
 import 'chatdetailscreen.dart';
 
 class MessageScreen extends StatefulWidget {

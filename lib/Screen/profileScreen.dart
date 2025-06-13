@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/profileController.dart';
-import '../models/post_model.dart';
-import '../user_data_model/userService.dart';
+import '../controllers/profile.dart';
+import '../models/postStack.dart';
+import '../models/userService.dart';
 import 'notificationsscreen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -246,7 +246,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/profileController.dart';
+import '../controllers/profile.dart';
 import '../models/post_model.dart';
 import '../user_data_model/userService.dart';
 

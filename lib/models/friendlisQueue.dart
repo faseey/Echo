@@ -1,8 +1,5 @@
 import 'dart:collection';
-import 'dart:developer';
-
 import 'package:get/get.dart';
-
 import 'echo.dart';
 
 enum RequestStatus { pending, accepted, rejected }
@@ -73,63 +70,46 @@ class AcceptedRequest {
   AcceptedRequest({required this.senderIndex, required this.isAccepted});
 }
 
-class RequestQueue extends GetxController{
-  RequestNode? front;
-  RequestNode? rear;
+class RequestQueue extends GetxController {
+  RequestNode? _front;
+  RequestNode? _rear;
 
   RequestQueue();
 
-  Future<void> addRequest(Request request) async {
+  RequestNode? get front => _front;
 
+  Future<void> addRequest(Request request) async {
     final Echo echo = Get.find<Echo>();
-    if (request.senderIndex < 0 || request.receiverIndex < 0 || echo.connections == null) {
-      return;
-    }
+    if (request.senderIndex < 0 || request.receiverIndex < 0 || echo.connections == null) return;
 
     RequestNode newNode = RequestNode(request: request);
 
-    if (rear == null) {
-      front = rear = newNode;
+    if (_rear == null) {
+      _front = _rear = newNode;
     } else {
-      rear!.next = newNode;
-      rear = newNode;
+      _rear!.next = newNode;
+      _rear = newNode;
     }
-
-
   }
+
   List<String> displayAllRequests({bool fullMessage = true}) {
     List<String> requestsList = [];
+    RequestNode? current = _front;
 
-    if (front == null) return requestsList;
-
-    RequestNode? current = front;
     while (current != null) {
       final username = current.request.friendUsername;
-      requestsList.add(
-          fullMessage ? '$username sent you a friend request' : username
-      );
+      requestsList.add(fullMessage ? '$username sent you a friend request' : username);
       current = current.next;
     }
 
     return requestsList;
   }
 
-
-
-  /// Processes all pending requests:
-  /// If acceptAll = true, accept all pending requests.
-  /// If false, reject all pending requests.
-  /// Returns list of AcceptedRequest for accepted ones.
   Future<List<AcceptedRequest>> showRequests(bool acceptAll) async {
-
     final Echo echo = Get.find<Echo>();
     List<AcceptedRequest> acceptedRequests = [];
 
-    if (front == null) {
-      return acceptedRequests;
-    }
-
-    RequestNode? current = front;
+    RequestNode? current = _front;
     while (current != null) {
       if (current.request.status == RequestStatus.pending) {
         if (acceptAll) {
@@ -146,60 +126,52 @@ class RequestQueue extends GetxController{
       }
       current = current.next;
     }
+
     await echo.saveConnectionsToFirebase();
     return acceptedRequests;
   }
 
   void clear() {
-    front = rear = null;
+    _front = _rear = null;
   }
+
   List<Map<String, dynamic>> toJsonList() {
     List<Map<String, dynamic>> jsonList = [];
-    RequestNode? current = front;
+    RequestNode? current = _front;
+
     while (current != null) {
       jsonList.add(current.request.toJson());
       current = current.next;
     }
+
     return jsonList;
   }
 
   void deleteRequestBySender(String senderUsername) {
-
-
-
-    RequestNode? current = front;
+    RequestNode? current = _front;
     RequestNode? prev;
 
-
     while (current != null) {
-
-      ////traversing thruu nodes to match the username of the sender of request ///////
-      if (current.request.friendUsername.toLowerCase().trim() == senderUsername.toLowerCase().trim())
-      {
-
-        ///meand its is on top/////
+      if (current.request.friendUsername.toLowerCase().trim() == senderUsername.toLowerCase().trim()) {
         if (prev == null) {
-          front = current.next;
+          _front = current.next;
         } else {
           prev.next = current.next;
         }
 
-        if (current == rear) {
-          rear = prev;
+        if (current == _rear) {
+          _rear = prev;
         }
-
-        break; // stop after deleting
+        break;
       }
 
       prev = current;
       current = current.next;
     }
-
   }
 
-      ////use to find the node in the q of the sender
   RequestNode? getNodeOfSender(String senderUsername) {
-    RequestNode? current = front; //front node is the attribute of ReqQ class
+    RequestNode? current = _front;
     while (current != null) {
       if (current.request.friendUsername == senderUsername) {
         return current;
@@ -209,21 +181,18 @@ class RequestQueue extends GetxController{
     return null;
   }
 
-
   void loadFromJsonList(List<dynamic> jsonList) {
-    front = null;
-    rear = null;
+    _front = _rear = null;
 
     for (var reqJson in jsonList) {
       Request req = Request.fromJson(reqJson);
-      // Directly create nodes without calling addRequest()
       RequestNode newNode = RequestNode(request: req);
 
-      if (rear == null) {
-        front = rear = newNode;
+      if (_rear == null) {
+        _front = _rear = newNode;
       } else {
-        rear!.next = newNode;
-        rear = newNode;
+        _rear!.next = newNode;
+        _rear = newNode;
       }
     }
   }

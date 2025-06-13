@@ -2,7 +2,7 @@ import 'package:echo_app/component/route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/register_controller.dart';
+import '../controllers/register_login.dart';
 
 
 class LoginScreen extends StatelessWidget {

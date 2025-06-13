@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/newsfeedcontroller.dart';
+import '../controllers/newsfeed.dart';
 import '../component/MyDrawer.dart';
 
 class NewsFeedScreen extends StatefulWidget {
@@ -167,9 +167,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/newsfeedcontroller.dart';
+import '../controllers/newsfeed.dart';
 import '../component/MyDrawer.dart';
-import '../controllers/profileController.dart';
+import '../controllers/profile.dart';
 
 class NewsFeedScreen extends StatefulWidget {
   const NewsFeedScreen({Key? key}) : super(key: key);

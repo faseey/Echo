@@ -76,7 +76,11 @@ class NewsFeedHeap {
     _heap[j] = temp;
   }
 
-  void addPost(String post, String date, String username, String imageBase64,String profileimg) {
+
+  void addPost(String post, String date, String username, String imageBase64,String profileimg){
+    _addPost(post, date, username, imageBase64, profileimg);
+  }
+  void _addPost(String post, String date, String username, String imageBase64,String profileimg) {
     final node = NewsFeedNode(post, date, username, imageBase64,profileimg);
     _heap.add(node);
     _heapifyUp(_heap.length - 1);

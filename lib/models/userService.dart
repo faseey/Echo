@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
-import '../models/NotificationList.dart';
-import '../models/friendlist.dart';
-import '../models/message.dart';
-import '../models/newsfeedheap.dart';
-import '../models/post_model.dart';
-import '../models/poststack.dart';
+import 'newsfeedheap.dart';
+import 'notificationStack.dart';
+import 'friendlisQueue.dart';
+import 'messageLL.dart';
+import 'postStack.dart';
+
+
 
 class User {
   String _username;
@@ -22,7 +22,6 @@ class User {
   int _userIndex;
   PostStack _postStack;
   RequestQueue _requestQueue;
- // ImagePostStack _imagePostStack;
   Messages _message;
   NewsFeedHeap _newsfeedheap;
   NotificationStack _notification;
@@ -41,7 +40,6 @@ class User {
     int user_index = -1,
     PostStack? postStack,
     RequestQueue? requestQueue,
-  //  ImagePostStack? imagePostStack,
     Messages? message,
     NewsFeedHeap? newsfeedheap,
     NotificationStack? notification,
@@ -62,7 +60,6 @@ class User {
         _userIndex = user_index,
         _postStack = postStack ?? PostStack(),
         _requestQueue = requestQueue ?? RequestQueue(),
-       // _imagePostStack = imagePostStack ?? ImagePostStack(),
         _message = message ?? Messages(),
         _newsfeedheap = newsfeedheap ?? NewsFeedHeap(),
         _notification = notification ?? NotificationStack();
@@ -83,7 +80,6 @@ class User {
   int get userIndex => _userIndex;
   PostStack get postStack => _postStack;
   RequestQueue get requestQueue => _requestQueue;
- // ImagePostStack get imagePostStack => _imagePostStack;
   Messages get message => _message;
   NewsFeedHeap get newsfeedheap => _newsfeedheap;
   NotificationStack get notifications => _notification;
@@ -109,7 +105,6 @@ class User {
     'profileImageUrl': _profileImageUrl,
     'bio': _bio,
     'user_index': _userIndex,
-    //'posts': _imagePostStack.toJsonList(),
     'friendRequests': _requestQueue.toJsonList(),
     'chatList': _message.toJsonList(),
     'newsFeed': _newsfeedheap.toJsonList(),
@@ -156,7 +151,6 @@ class User {
       profileImageUrl: json['profileImageUrl'] ?? '',
       bio: json['bio'] ?? '',
       user_index: json['user_index'] ?? -1,
-     // imagePostStack: imagePostStack,
       requestQueue: requestQueue,
       message: messages,
       newsfeedheap: newsFeed,
@@ -173,4 +167,5 @@ class User {
       'notifications': _notification.toList(),
     });
   }
+
 }
