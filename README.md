@@ -87,16 +87,17 @@ Echo is built using the following core technologies and architectural patterns:
 
 Echo/
 ├── android/                            # Android-specific project files and configurations
-├── assets/images/                      # Application image assets
+├── assets/                             # Application assets
+│   └── images/                         # Image assets
 ├── lib/                                # Dart source code
 │   ├── component/                      # Reusable UI widgets and common Flutter components
-│   │   ├── MyDrawer.dart               # Custom navigation drawer for the app
-│   │   ├── MyTextBox.dart              # Custom text input field widget
-│   │   ├── bottomNavbar.dart           # Bottom navigation bar implementation
-│   │   ├── button_container.dart       # Reusable button container widget
+│   │   ├── MyDrawer.dart               # Custom navigation drawer
+│   │   ├── MyTextBox.dart              # Custom text input field
+│   │   ├── bottomNavbar.dart           # Bottom navigation bar
+│   │   ├── button_container.dart       # Reusable button container
 │   │   ├── myListTile.dart             # Custom list tile widget
 │   │   └── route.dart                  # Application routing definitions
-│   ├── constant/                       # Constant values, utility functions, or common builders
+│   ├── constant/                       # Constant values and utility functions
 │   │   └── post_card_builder.dart      # Widget builder for displaying post cards
 │   ├── controllers/                    # GetX controllers for managing application logic and state (MVC)
 │   │   ├── friends_connections.dart    # Manages friend requests, connections, and suggestions
@@ -139,8 +140,6 @@ Echo/
 ├── pubspec.lock                        # Flutter package lock file
 ├── pubspec.yaml                        # Flutter project dependencies and metadata
 └── README.md                           # Project documentation
-
-
 
 
 ## 🚀 **Quick Start Guide**
