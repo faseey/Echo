@@ -141,7 +141,7 @@ Echo/
 ├── pubspec.lock                        # Flutter package lock file
 ├── pubspec.yaml                        # Flutter project dependencies and metadata
 └── README.md                           # Project documentation
-
+```
 ## 🚀 **Quick Start Guide**
 
 To get Echo up and running on your local machine, follow these steps:
