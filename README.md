@@ -85,6 +85,7 @@ Echo is built using the following core technologies and architectural patterns:
 
 ### 📂 **Project Structure**
 
+```
 Echo/
 ├── android/                            # Android-specific project files and configurations
 ├── assets/                             # Application assets
@@ -140,7 +141,6 @@ Echo/
 ├── pubspec.lock                        # Flutter package lock file
 ├── pubspec.yaml                        # Flutter project dependencies and metadata
 └── README.md                           # Project documentation
-
 
 ## 🚀 **Quick Start Guide**
 
