@@ -1,16 +1,16 @@
-# 💬 Echo - A Social Communication Platform
+# Echo - A Social Communication Platform
 
 > **Echo is a GUI-based Flutter social application meticulously engineered as my 4th semester Data Structures and Algorithms (DSA) project.**
 
-## 🎯 **Project Goal**
+## Project Goal
 
 The primary objective of the Echo project was to **gain a strong practical understanding of how to implement and integrate fundamental Data Structures and Algorithms (DSA) in a real-world, interactive application.** This project serves as a comprehensive demonstration of how DSA concepts are crucial for building scalable, efficient, and feature-rich systems in software development. Through a **robust and object-oriented design**, Echo also emphasizes how a well-structured project can **facilitate easy implementation of new features and future scalability.**
 
-## ℹ️ **About the Application**
+## About the Application
 
 Echo provides a rich set of social features designed to mimic modern social networking interactions. It offers robust one-to-one chat capabilities, a dynamic news feed, comprehensive friend request management, and intelligent friend suggestions. All these functionalities are powered by an extensive implementation and integration of core data structures and algorithms, showcasing their practical application within a user-friendly and interactive GUI.
 
-## 🌟 **Key Highlights**
+## Key Highlights
 
 * **Deep DSA Integration**: A practical demonstration of how core data structures and algorithms form the backbone of modern social applications, designed from a low-level system design perspective.
 
@@ -22,15 +22,15 @@ Echo provides a rich set of social features designed to mimic modern social netw
 
 * **Smart Social Features**: Friend suggestions powered by graph algorithms, and a news feed optimized for relevance and timely content delivery.
 
-## 🚀 **Core Features**
+## Core Features
 
-### 👥 **User Management & Profile**
+### User Management & Profile
 
 * **User Registration & Login**: Secure authentication for new and existing users.
 
 * **User Profiles**: Manage personal information and display posts.
 
-### 💬 **Communication & Interaction**
+### Communication & Interaction
 
 * **One-to-One Chat**: Exchange messages between friends using a responsive messaging interface.
 
@@ -44,13 +44,13 @@ Echo provides a rich set of social features designed to mimic modern social netw
 
 * **Posting**: Create and share image-based posts with captions.
 
-### 🧠 **Smart Social Features**
+### Smart Social Features
 
 * **Friend Suggestions**: Discover potential connections based on your existing friend network.
 
 * **Dynamic News Feed**: Posts are organized to show the most recent and relevant content first.
 
-## 📚 **Educational Purpose**
+## Educational Purpose
 
 This project was developed with a strong focus on applying theoretical Data Structures and Algorithms concepts to a practical, full-stack application. It aims to demonstrate:
 
@@ -62,7 +62,7 @@ This project was developed with a strong focus on applying theoretical Data Stru
 
 * Best practices in **Object-Oriented Programming (OOP)** and architectural patterns like **MVC**.
 
-## 📊 **Data Structures & Algorithms in Action**
+## Data Structures & Algorithms in Action
 
 This project is a direct application of various data structures and algorithms to solve real-world social network challenges:
 
@@ -75,7 +75,7 @@ This project is a direct application of various data structures and algorithms t
 | **Queue (FIFO)** | `RequestQueue` manages incoming **friend requests** in a First-In, First-Out (FIFO) order, ensuring requests are processed equitably based on arrival time. |
 | **Heap (Priority Queue)** | `NewsFeedHeap` is implemented as a **Max-Heap** (ordered by date) to manage the **news feed**. This allows the application to efficiently retrieve and display posts from friends in chronological order (newest first). |
 
-## 💻 **Tech Stack**
+## Tech Stack
 
 Echo is built using the following core technologies and architectural patterns:
 
@@ -83,7 +83,7 @@ Echo is built using the following core technologies and architectural patterns:
 * **Backend & Persistence**: Firebase Firestore for scalable data storage and user authentication.
 * **Core Data Structures**: Custom-built implementations of various ADTs including **AVL Tree**, **Graph (Adjacency Matrix)**, **Linked List**, **Stack**, **Queue**, and **Heap (Priority Queue)**, which are central to the application's logic and performance.
 
-### 📂 **Project Structure**
+### Project Structure
 
 ```
 Echo/
@@ -94,8 +94,8 @@ Echo/
 │   ├── component/                      # Reusable UI widgets and common Flutter components
 │   │   ├── MyDrawer.dart               # Custom navigation drawer
 │   │   ├── MyTextBox.dart              # Custom text input field
-│   │   ├── bottomNavbar.dart           # Bottom navigation bar
-│   │   ├── button_container.dart       # Reusable button container
+│   │   ├── bottomNavbar.dart           # Bottom navigation bar implementation
+│   │   ├── button_container.dart       # Reusable button container widget
 │   │   ├── myListTile.dart             # Custom list tile widget
 │   │   └── route.dart                  # Application routing definitions
 │   ├── constant/                       # Constant values and utility functions
@@ -142,11 +142,12 @@ Echo/
 ├── pubspec.yaml                        # Flutter project dependencies and metadata
 └── README.md                           # Project documentation
 ```
-## 🚀 **Quick Start Guide**
+
+## Quick Start Guide
 
 To get Echo up and running on your local machine, follow these steps:
 
-### 📋 **Prerequisites**
+### Prerequisites
 
 * **Flutter SDK**: [Install Flutter](https://flutter.dev/docs/get-started/install) (ensure you have the latest stable channel).
 
@@ -154,23 +155,23 @@ To get Echo up and running on your local machine, follow these steps:
 
 * **Firebase Project**: A Firebase project set up with Firestore and Authentication (for email/password sign-in). Ensure your `firebase.json` is configured correctly for your platform (Android/iOS).
 
-### ⚡ **Installation**
+### Installation
 
-1.  **📥 Clone the Repository**
+1.  **Clone the Repository**
 
     ```bash
     git clone [https://github.com/faseey/Echo.git](https://github.com/faseey/Echo.git)
     cd Echo
     ```
 
-2.  **⚙️ Install Dependencies**
+2.  **Install Dependencies**
     Navigate into the project directory and fetch the Flutter/Dart packages:
 
     ```bash
     flutter pub get
     ```
 
-3.  **🔥 Firebase Setup (Manual Steps)**
+3.  **Firebase Setup (Manual Steps)**
 
     * Create a Firebase project in the Firebase Console.
 
@@ -180,7 +181,7 @@ To get Echo up and running on your local machine, follow these steps:
 
     * Enable **Cloud Firestore** and **Authentication** (specifically Email/Password provider) in your Firebase project.
 
-4.  **🔨 Run the Application**
+4.  **Run the Application**
     Ensure a device or emulator is running, then launch the app:
 
     ```bash
@@ -189,7 +190,7 @@ To get Echo up and running on your local machine, follow these steps:
 
     (You may need to run `flutter clean` before `flutter run` if you encounter build issues.)
 
-## 🎮 **How to Use**
+## How to Use
 
 The Echo social app provides an intuitive user experience:
 
@@ -213,15 +214,15 @@ The Echo social app provides an intuitive user experience:
 
 7.  **Receive Notifications**: Get updates for new messages, friend requests, and accepted connections, managed by a **Stack**.
 
-## 🤝 **Contributing**
+## Contributing
 
 We welcome contributions from the community! If you'd like to help improve Echo, please follow these guidelines:
 
-### 🔄 **Development Workflow**
+### Development Workflow
 
-1.  **🍴 Fork** the repository on GitHub.
+1.  **Fork** the repository on GitHub.
 
-2.  **🌿 Create** a new branch for your feature or bug fix:
+2.  **Create** a new branch for your feature or bug fix:
 
     ```bash
     git checkout -b feature/your-amazing-feature
@@ -229,11 +230,11 @@ We welcome contributions from the community! If you'd like to help improve Echo,
     git checkout -b bugfix/resolve-issue-xyz
     ```
 
-3.  **💻 Code** your improvements and additions.
+3.  **Code** your improvements and additions.
 
-4.  **✅ Test** thoroughly to ensure functionality and prevent regressions.
+4.  **Test** thoroughly to ensure functionality and prevent regressions.
 
-5.  **📝 Commit** your changes with clear, descriptive messages:
+5.  **Commit** your changes with clear, descriptive messages:
 
     ```bash
     git commit -m "feat: Add new amazing feature"
@@ -241,26 +242,36 @@ We welcome contributions from the community! If you'd like to help improve Echo,
     git commit -m "fix: Resolve issue with chat scrolling"
     ```
 
-6.  **🚀 Push** your local branch to your forked repository:
+6.  **Push** your local branch to your forked repository:
 
     ```bash
     git push origin feature/your-amazing-feature
     ```
 
-7.  **📋 Submit** a Pull Request (PR) to the `main` branch of this repository, describing your changes in detail.
+7.  **Submit** a Pull Request (PR) to the `main` branch of this repository, describing your changes in detail.
 
 
+## Acknowledgments
+
+* **Flutter**: For providing an expressive and performant UI toolkit.
+
+* **Firebase**: For robust backend services (Firestore, Authentication).
+
+* **GetX**: For a powerful and efficient state management solution.
+
+* **Dart**: The elegant language powering the application.
+
+* **Open-Source Community**: For countless resources, tutorials, and inspiration.
 
 ---
 
 <div align="center">
 
-### ⭐ **Star this repository if you find it helpful!** ⭐
-
+### **Star this repository if you find it helpful!**
 
 
 ---
 
-*Connect, Share, Echo!* 🚀
+*Connect, Share, Echo!*
 
 </div>
