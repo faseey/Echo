@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 
 import '../Screen/LoginScreen.dart';
 import '../Screen/friendscreen.dart';
-import '../Screen/new_post_screen.dart';
-import '../Screen/postScreen.dart';
+
+
+import '../Screen/post_screen.dart';
 import '../Screen/profileScreen.dart';
 import '../Screen/registerScreen.dart';
 import '../models/echo.dart';

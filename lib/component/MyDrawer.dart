@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../Screen/LoginScreen.dart';
-import '../Screen/postScreen.dart';
+
 import '../Screen/profileScreen.dart';
 import '../controllers/register_login.dart';
 

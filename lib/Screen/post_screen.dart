@@ -24,7 +24,7 @@ class NewPostScreen extends StatelessWidget {
       return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.grey[200],
-        drawer: MyDrawer(),
+       // drawer: MyDrawer(),
         body: Column(
           children: [
             // Curved Top Header
@@ -46,12 +46,12 @@ class NewPostScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white, size: 30),
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                    ),
-                  ),
+                  // Builder(
+                  //   builder: (context) => IconButton(
+                  //     icon: const Icon(Icons.menu, color: Colors.white, size: 30),
+                  //     onPressed: () => Scaffold.of(context).openDrawer(),
+                  //   ),
+                  // ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

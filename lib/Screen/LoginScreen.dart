@@ -20,16 +20,17 @@ class LoginScreen extends StatelessWidget {
 
         appBar: AppBar(
 
-          centerTitle: true,
+
           // Attractive purple
 
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                Icon(Icons.lock,size: 100,color: Color(0xff123456),),
+                Image.asset("assets/images/echo_logo.png",scale: 2,),
+
                 Center(child: Text("Welcome Echo!",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)),
                 Center(child: Text("Sign in your Account",style: TextStyle(fontSize: 13),)),
                 SizedBox(height: 40,),
@@ -95,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000000),
+                              backgroundColor: const Color(0xff123456),
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(

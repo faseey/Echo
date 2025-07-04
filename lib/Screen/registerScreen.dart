@@ -49,7 +49,7 @@ class RegisterScreen extends StatelessWidget {
                     validator: (value) {
 
                       if(value == null || value.isEmpty)  return 'Enter username' ;
-                      //if(value.length <3) return "invalid user";
+
 
                     }
 
@@ -216,7 +216,7 @@ class RegisterScreen extends StatelessWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Color(0xff123456),
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(

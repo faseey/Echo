@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'Screen/LoginScreen.dart';
-import 'Screen/postScreen.dart';
+
 import 'Screen/registerScreen.dart';
 import 'component/bottomNavbar.dart';
 import 'component/route.dart';
