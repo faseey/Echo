@@ -58,7 +58,7 @@ Here’s a visual walkthrough of Echo’s core features:
 
 <p align="center">
   <img src="assets/Screeenshots/login.png" alt="Login Screen" width="300"/>
-  <img src="assets/Screeenshots/register.png" alt="Register Screen" width="300"/>
+  <img src="assets/Screeenshots/sign up.png" alt="Register Screen" width="300"/>
 </p>
 
 ### 🏠 Home & News Feed
