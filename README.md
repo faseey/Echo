@@ -58,6 +58,8 @@ A quick preview of Echo’s key features in action:
 
 ### 🔐 Login & Registration
 
+<div align="center">
+
 <table>
   <tr>
     <td align="center">
@@ -72,9 +74,13 @@ A quick preview of Echo’s key features in action:
   </tr>
 </table>
 
+</div>
+
 ---
 
 ### 📝 Add Post / 📰 News Feed
+
+<div align="center">
 
 <table>
   <tr>
@@ -90,9 +96,13 @@ A quick preview of Echo’s key features in action:
   </tr>
 </table>
 
+</div>
+
 ---
 
 ### 💬 Messages / 🧵 Chat List
+
+<div align="center">
 
 <table>
   <tr>
@@ -108,9 +118,13 @@ A quick preview of Echo’s key features in action:
   </tr>
 </table>
 
+</div>
+
 ---
 
 ### 🤝 Friend Connections (Requests, Friends, Suggestions)
+
+<div align="center">
 
 <table>
   <tr>
@@ -122,27 +136,7 @@ A quick preview of Echo’s key features in action:
     <td align="center">
       <img src="assets/Screeenshots/Friends%20Connection.png" width="200" height="400"/><br/>
       <sub><b>Friends List</b></sub>
-    </td>
-    <td style="width: 20px;"></td>
-    <td align="center">
-      <img src="assets/Screeenshots/suggestions.png" width="200" height="400"/><br/>
-      <sub><b>Suggestions</b></sub>
-    </td>
-  </tr>
-</table>
-
----
-
-### 🔔 Notifications
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/Screeenshots/Notifications.png" width="200" height="400"/><br/>
-      <sub><b>Notifications</b></sub>
-    </td>
-  </tr>
-</table>
+    </
 
 
 ## Educational Purpose
