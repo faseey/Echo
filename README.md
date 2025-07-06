@@ -50,6 +50,30 @@ Echo provides a rich set of social features designed to mimic modern social netw
 
 * **Dynamic News Feed**: Posts are organized to show the most recent and relevant content first.
 
+## 📸 App Screenshots
+
+Here’s a visual walkthrough of Echo’s core features:
+
+### 🔐 Login & Registration
+![Login Screen](assets/Screeenshots/login.png)
+![Register Screen](assets/Screeenshots/sign up.png)
+
+### 🏠 Home & News Feed
+![Home Feed](assets/Screeenshots/newsfeed.png)
+![Post Detail](assets/Screeenshots/post.png)
+
+### 👥 Friend Requests & Suggestions
+![Friend Requests](assets/Screeenshots/friend_requests.png)
+![Friend Suggestions](assets/Screeenshots/suggestions.png)
+
+### 💬 Chat Interface
+![Messages List](assets/Screeenshots/message_list.png)
+![Chat Window](assets/Screeenshots/chat.png)
+
+### 🧑‍💼 Profile Management
+![Profile Screen](assets/Screeenshots/profile.png)
+
+
 ## Educational Purpose
 
 This project was developed with a strong focus on applying theoretical Data Structures and Algorithms concepts to a practical, full-stack application. It aims to demonstrate:
