@@ -52,40 +52,36 @@ Echo provides a rich set of social features designed to mimic modern social netw
 
 ## 📸 App Screenshots
 
-Here’s a visual walkthrough of Echo’s core features:
+A quick preview of Echo’s key features in action:
 
 ### 🔐 Login & Registration
-
 <p align="center">
-  <img src="assets/Screeenshots/login.png" alt="Login Screen" width="300"/>
-  <img src="assets/Screeenshots/sign up.png" alt="Register Screen" width="300"/>
+  <img src="assets/Screeenshots/login.png" alt="Login Screen" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/sign up.png" alt="Register Screen" style="width: 200px; height: 400px;" />
 </p>
 
-### 🏠 Home & News Feed
-
+### 📝 Add Post / 📰 News Feed
 <p align="center">
-  <img src="assets/Screeenshots/newsfeed.png" alt="News Feed" width="300"/>
-  <img src="assets/Screeenshots/post.png" alt="Post Screen" width="300"/>
+  <img src="assets/Screeenshots/add post.png" alt="Add Post" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/Newsfeed.png" alt="News Feed" style="width: 200px; height: 400px;" />
 </p>
 
-### 👥 Friend Requests & Suggestions
-
+### 💬 Messages / 🧵 Chat List
 <p align="center">
-  <img src="assets/Screeenshots/friend_requests.png" alt="Friend Requests" width="300"/>
-  <img src="assets/Screeenshots/suggestions.png" alt="Suggestions" width="300"/>
+  <img src="assets/Screeenshots/Messages list.png" alt="Messages" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/chat.png" alt="Chat" style="width: 200px; height: 400px;" />
 </p>
 
-### 💬 Chat Interface
-
+### 🤝 Friend Connections (Requests, Friends, Suggestions)
 <p align="center">
-  <img src="assets/Screeenshots/message_list.png" alt="Message List" width="300"/>
-  <img src="assets/Screeenshots/chat.png" alt="Chat" width="300"/>
+  <img src="assets/Screeenshots/Friend Request.png" alt="Requests" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/friends Connections.png" alt="Friends" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/suggestions.png" alt="Suggestions" style="width: 200px; height: 400px;" />
 </p>
 
-### 🧑‍💼 Profile Management
-
+### 🔔 Notifications
 <p align="center">
-  <img src="assets/Screeenshots/profile.png" alt="Profile" width="300"/>
+  <img src="assets/Screeenshots/Notifications.png" alt="Notifications" style="width: 200px; height: 400px;" />
 </p>
 
 
