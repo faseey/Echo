@@ -55,23 +55,38 @@ Echo provides a rich set of social features designed to mimic modern social netw
 Here’s a visual walkthrough of Echo’s core features:
 
 ### 🔐 Login & Registration
-![Login Screen](assets/Screeenshots/login.png)
-![Register Screen](assets/Screeenshots/sign up.png)
+
+<p align="center">
+  <img src="assets/Screeenshots/login.png" alt="Login Screen" width="300"/>
+  <img src="assets/Screeenshots/register.png" alt="Register Screen" width="300"/>
+</p>
 
 ### 🏠 Home & News Feed
-![Home Feed](assets/Screeenshots/newsfeed.png)
-![Post Detail](assets/Screeenshots/post.png)
+
+<p align="center">
+  <img src="assets/Screeenshots/newsfeed.png" alt="News Feed" width="300"/>
+  <img src="assets/Screeenshots/post.png" alt="Post Screen" width="300"/>
+</p>
 
 ### 👥 Friend Requests & Suggestions
-![Friend Requests](assets/Screeenshots/friend_requests.png)
-![Friend Suggestions](assets/Screeenshots/suggestions.png)
+
+<p align="center">
+  <img src="assets/Screeenshots/friend_requests.png" alt="Friend Requests" width="300"/>
+  <img src="assets/Screeenshots/suggestions.png" alt="Suggestions" width="300"/>
+</p>
 
 ### 💬 Chat Interface
-![Messages List](assets/Screeenshots/message_list.png)
-![Chat Window](assets/Screeenshots/chat.png)
+
+<p align="center">
+  <img src="assets/Screeenshots/message_list.png" alt="Message List" width="300"/>
+  <img src="assets/Screeenshots/chat.png" alt="Chat" width="300"/>
+</p>
 
 ### 🧑‍💼 Profile Management
-![Profile Screen](assets/Screeenshots/profile.png)
+
+<p align="center">
+  <img src="assets/Screeenshots/profile.png" alt="Profile" width="300"/>
+</p>
 
 
 ## Educational Purpose
