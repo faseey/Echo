@@ -57,25 +57,25 @@ A quick preview of Echo’s key features in action:
 ### 🔐 Login & Registration
 <p align="center">
   <img src="assets/Screeenshots/login.png" alt="Login Screen" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/sign up.png" alt="Register Screen" style="width: 200px; height: 400px;" />
+  <img src="assets/Screeenshots/sign%20up.png" alt="Register Screen" style="width: 200px; height: 400px;" />
 </p>
 
 ### 📝 Add Post / 📰 News Feed
 <p align="center">
-  <img src="assets/Screeenshots/add post.png" alt="Add Post" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/add%20post.png" alt="Add Post" style="width: 200px; height: 400px; margin-right: 10px;" />
   <img src="assets/Screeenshots/Newsfeed.png" alt="News Feed" style="width: 200px; height: 400px;" />
 </p>
 
 ### 💬 Messages / 🧵 Chat List
 <p align="center">
-  <img src="assets/Screeenshots/Messages list.png" alt="Messages" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/Messages%20list.png" alt="Messages" style="width: 200px; height: 400px; margin-right: 10px;" />
   <img src="assets/Screeenshots/chat.png" alt="Chat" style="width: 200px; height: 400px;" />
 </p>
 
 ### 🤝 Friend Connections (Requests, Friends, Suggestions)
 <p align="center">
-  <img src="assets/Screeenshots/Friend Request.png" alt="Requests" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/friends Connections.png" alt="Friends" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/Friend%20Request.png" alt="Requests" style="width: 200px; height: 400px; margin-right: 10px;" />
+  <img src="assets/Screeenshots/Friends%20Connections.png" alt="Friends" style="width: 200px; height: 400px; margin-right: 10px;" />
   <img src="assets/Screeenshots/suggestions.png" alt="Suggestions" style="width: 200px; height: 400px;" />
 </p>
 
