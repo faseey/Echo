@@ -54,35 +54,95 @@ Echo provides a rich set of social features designed to mimic modern social netw
 
 A quick preview of Echo’s key features in action:
 
+---
+
 ### 🔐 Login & Registration
-<p align="center">
-  <img src="assets/Screeenshots/login.png" alt="Login Screen" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/sign%20up.png" alt="Register Screen" style="width: 200px; height: 400px;" />
-</p>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Screeenshots/login.png" width="200" height="400"/><br/>
+      <sub><b>Login</b></sub>
+    </td>
+    <td style="width: 30px;"></td>
+    <td align="center">
+      <img src="assets/Screeenshots/sign%20up.png" width="200" height="400"/><br/>
+      <sub><b>Register</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ### 📝 Add Post / 📰 News Feed
-<p align="center">
-  <img src="assets/Screeenshots/add%20post.png" alt="Add Post" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/Newsfeed.png" alt="News Feed" style="width: 200px; height: 400px;" />
-</p>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Screeenshots/add%20post.png" width="200" height="400"/><br/>
+      <sub><b>Add Post</b></sub>
+    </td>
+    <td style="width: 30px;"></td>
+    <td align="center">
+      <img src="assets/Screeenshots/Newsfeed.png" width="200" height="400"/><br/>
+      <sub><b>News Feed</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ### 💬 Messages / 🧵 Chat List
-<p align="center">
-  <img src="assets/Screeenshots/Messages%20list.png" alt="Messages" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/chat.png" alt="Chat" style="width: 200px; height: 400px;" />
-</p>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Screeenshots/Messages%20list.png" width="200" height="400"/><br/>
+      <sub><b>Messages</b></sub>
+    </td>
+    <td style="width: 30px;"></td>
+    <td align="center">
+      <img src="assets/Screeenshots/chat.png" width="200" height="400"/><br/>
+      <sub><b>Chat</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ### 🤝 Friend Connections (Requests, Friends, Suggestions)
-<p align="center">
-  <img src="assets/Screeenshots/Friend%20Request.png" alt="Requests" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/Friends%20Connections.png" alt="Friends" style="width: 200px; height: 400px; margin-right: 10px;" />
-  <img src="assets/Screeenshots/suggestions.png" alt="Suggestions" style="width: 200px; height: 400px;" />
-</p>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Screeenshots/Friend%20Request.png" width="200" height="400"/><br/>
+      <sub><b>Friend Requests</b></sub>
+    </td>
+    <td style="width: 20px;"></td>
+    <td align="center">
+      <img src="assets/Screeenshots/Friends%20Connection.png" width="200" height="400"/><br/>
+      <sub><b>Friends List</b></sub>
+    </td>
+    <td style="width: 20px;"></td>
+    <td align="center">
+      <img src="assets/Screeenshots/suggestions.png" width="200" height="400"/><br/>
+      <sub><b>Suggestions</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ### 🔔 Notifications
-<p align="center">
-  <img src="assets/Screeenshots/Notifications.png" alt="Notifications" style="width: 200px; height: 400px;" />
-</p>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Screeenshots/Notifications.png" width="200" height="400"/><br/>
+      <sub><b>Notifications</b></sub>
+    </td>
+  </tr>
+</table>
 
 
 ## Educational Purpose
