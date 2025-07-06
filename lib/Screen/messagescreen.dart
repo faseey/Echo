@@ -217,7 +217,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Messsage",style: TextStyle(color: Colors.white,fontSize: 18),),
+                    child: Text("Messsage",style: TextStyle(color: Colors.white,fontSize: 24, fontWeight: FontWeight.bold),),
                   ),
 
                   Row(

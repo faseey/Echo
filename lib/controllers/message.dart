@@ -167,8 +167,8 @@ class MessageController extends GetxController {
       sentByMe: true,
     );
     currentUser?.message.addMessage(receiver, sentMsg);
-    await saveUserToFirebase(activeUserNode!.user);
-    await loadUserFromFirebase(activeUserNode!.user.username);
+   // await saveUserToFirebase(activeUserNode!.user);
+    //await loadUserFromFirebase(activeUserNode!.user.username);
 
     final receivedMsg = MessageNode(
       sender: sender,
@@ -181,8 +181,9 @@ class MessageController extends GetxController {
     if (receiverNode != null) {
       receiverNode.user.message.addMessage(sender, receivedMsg);
       receiverNode.user.notifications.addNotification('message', sender);
+      print("added");
       await saveUserToFirebase(receiverNode.user);
-      await loadUserFromFirebase(receiverNode.user.username);
+    // await loadUserFromFirebase(receiverNode.user.username);
     } else {
       Get.snackbar("Error", "Receiver not found");
     }

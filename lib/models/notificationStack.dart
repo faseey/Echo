@@ -48,9 +48,11 @@ class NotificationStack {
 
   // Private: add logic
   void _addNotification(String type, String username) {
-    if (!_messages.containsKey(type)) return;
+    if (!_messages.containsKey(type)) {    print("Skipped unknown type: $type");
+      return;}
 
     final message = '$username${_messages[type]}';
+    print("Adding notification: $message");
     final newNode = NotificationNode(
       type: type,
       username: username,

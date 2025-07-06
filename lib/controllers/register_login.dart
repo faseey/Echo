@@ -218,6 +218,7 @@
 //   }
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echo_app/controllers/profile.dart';
 import 'package:get/get.dart';
 import '../component/route.dart';
 import '../models/bst.dart';
@@ -336,6 +337,8 @@ class UserController extends GetxController {
         echo.activeUser = node;
       }
 
+      final profileController = Get.put(ProfileController());
+      profileController.initializeUser(); // 👈 Force load DP, bio etc.
       update();
 
       // Navigate to main app screen

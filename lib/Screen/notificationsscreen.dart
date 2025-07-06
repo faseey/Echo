@@ -49,7 +49,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff30567c),
         elevation: 4,
-        title: const Text("Notifications", style: TextStyle(color: Colors.white)),
+        title: const Text("Notifications", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),

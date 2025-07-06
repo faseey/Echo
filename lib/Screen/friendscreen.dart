@@ -66,13 +66,21 @@ class FriendScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  top: 40,
-                  left: 20,
-                  child: IconButton(
-                    icon: Icon(Icons.menu, color: Colors.white, size: 30),
-                    onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Text(
+                      "Friends",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
+
                 Positioned(
                   top: 100,
                   left: 20,

@@ -213,6 +213,12 @@ class ProfileController extends GetxController {
     }
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    initializeUser();           // Load profile data
+    loadPostsFromFirestore();  // Load posts immediately
+  }
 
   void gotoHoneScreen(){
     Get.toNamed(AppRouter.newPostScreen);
@@ -409,6 +415,7 @@ class ProfileController extends GetxController {
     update();
     Get.snackbar("Updated", "Post updated successfully");
   }
+
 
 
 }

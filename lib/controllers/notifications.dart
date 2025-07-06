@@ -48,6 +48,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../models/echo.dart';
 import '../models/notificationStack.dart';
 
 class NotificationController extends GetxController {
@@ -61,10 +62,32 @@ class NotificationController extends GetxController {
   }
 
   /// Clear all notifications from stack and UI
-  void clearAll() {
-    _notification.clearNotifications();
-    notifications.clear();
+  void clearAll() async {
+    final username = Get.find<Echo>().activeUser?.user.username;
+
+    if (username != null) {
+      try {
+        // Clear local stack
+        _notification.clearNotifications();
+        notifications.clear();
+
+        // Clear from Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(username)
+            .update({'notifications': []});
+      } catch (e) {
+        print("Error clearing notifications from Firestore: $e");
+        Get.snackbar(
+          "Error",
+          "Failed to clear notifications from backend",
+          backgroundColor: Get.theme.colorScheme.error,
+          colorText: Get.theme.colorScheme.onError,
+        );
+      }
+    }
   }
+
 
   /// Refresh observable list from the stack
   void refreshNotifications() {
